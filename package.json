@@ -26,6 +26,7 @@
     "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "glob": "^7.1.7",
-    "goosecache": "^9.0.14"
+    "goosecache": "^9.0.14",
+    "node-fetch": "^2.6.1"
   }
 }
