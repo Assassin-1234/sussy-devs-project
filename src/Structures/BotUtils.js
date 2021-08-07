@@ -91,7 +91,7 @@ module.exports = class Tools {
 				content: [
 					`\`${command.name}\` **is globally disabled! Please check back later**`,
 				].join('\n'),
-				components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/DaRWfwMRTa' }] }],
+				components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 			});
 			return false;
 		}

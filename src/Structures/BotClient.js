@@ -1,9 +1,9 @@
 /* eslint-disable no-unused-vars */
 const { Client, Collection, Permissions, Options } = require('discord.js');
-const TCOCDatabase = require('./TCOCDatabase.js');
-const Utils = require('./TCOCUtils.js');
+const BotDatabase = require('./BotDatabase.js');
+const Utils = require('./BotUtils.js');
 
-module.exports = class TCOCClient extends Client {
+module.exports = class BotClient extends Client {
 	constructor(options = {}) {
 		super({
 			intents: options.intents,
@@ -32,7 +32,7 @@ module.exports = class TCOCClient extends Client {
 		this.slashCooldowns = new Collection();
 
 		this.utils = new Utils(this);
-		this.db = new TCOCDatabase(this);
+		this.db = new BotDatabase(this);
 
 	}
 
