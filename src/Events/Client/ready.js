@@ -1,0 +1,31 @@
+const Event = require('../../Structures/EventBase.js');
+
+module.exports = class extends Event {
+	constructor(...args) {
+		super(...args, {
+			once: true,
+		});
+	}
+
+	async run() {
+		console.log(
+			[
+				`Logged in as ${this.client.user.tag}`,
+				`Loaded ${this.client.commands.size} commands & ${this.client.events.size} events!`,
+				`Ready in ${this.client.guilds.cache.size} guilds on ${this.client.channels.cache.size} channels, for a total of ${this.client.guilds.cache
+					.reduce((a, b) => a + b.memberCount, 0)} users.`,
+			].join('\n'),
+		);
+
+		this.client.user.setPresence({
+			activities: [
+				{
+					type: 'WATCHING',
+					name: `@${this.client.user.username} help | \nServing ${this.client.guilds.cache.size} Servers`,
+				},
+			],
+		});
+
+		await this.client.utils.sleep(2000);
+	}
+};
