@@ -1,0 +1,28 @@
+{
+  "name": "sussy-devs-project",
+  "version": "0.0.1",
+  "description": "sus",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Assassin-1234/sussy-devs-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Assassin-1234/sussy-devs-project/issues"
+  },
+  "homepage": "https://github.com/Assassin-1234/sussy-devs-project#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "dependencies": {
+    "discord.js": "^13.0.1",
+    "dotenv": "^10.0.0"
+  }
+}
