@@ -1,5 +1,6 @@
+/* eslint-disable no-unused-vars */
 const InteractionBase = require('../../Structures/InteractionBase');
-const { Interaction, MessageEmbed } = require('discord.js');
+const { Interaction } = require('discord.js');
 const ids = {
 	youtube: '755600276941176913',
 	poker: '755827207812677713',
