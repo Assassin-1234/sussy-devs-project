@@ -11,7 +11,7 @@ module.exports = class extends Event {
 
 		const guildData = await this.client.db.findOrCreateGuild(message.guild.id);
 
-		if (guildData.blacklist.state === true) return;
+		if (guildData.blacklist?.state === true) return;
 
 		const customPrefix = guildData.prefix ? guildData.prefix : this.client.prefix;
 
@@ -24,13 +24,13 @@ module.exports = class extends Event {
 		const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
 
 		const command =
-            this.client.commands.get(cmd.toLowerCase()) ||
-            this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
+			this.client.commands.get(cmd.toLowerCase()) ||
+			this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
 
 			if (command.disabled) {
 				message.reply({
-					content: [`\`${command.name}\` is globally disabled! Please check back later.` ].join('\n'),
+					content: [`\`${command.name}\` is globally disabled! Please check back later.`].join('\n'),
 					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 				});
 				return;
@@ -48,7 +48,7 @@ module.exports = class extends Event {
 					if (check === false) return;
 					return command[foundSubcommand.name](message, args, customPrefix).catch((err) => {
 						message.reply({
-							content: [`Something went wrong with \`${command.name}\`'s \`${foundSubcommand.name}\` subcommand 😔` ].join('\n'),
+							content: [`Something went wrong with \`${command.name}\`'s \`${foundSubcommand.name}\` subcommand 😔`].join('\n'),
 							components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 						});
 						console.log(err);
