@@ -1,5 +1,5 @@
 require('dotenv').config();
-const TCOCClient = require('./src/Structures/TCOCClient');
-const config = require('./src/Structures/TCOCConfig');
-const client = new TCOCClient(config);
+const BotClient = require('./src/Structures/BotClient');
+const config = require('./src/Structures/BotConfig');
+const client = new BotClient(config);
 client.connect();

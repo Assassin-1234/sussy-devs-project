@@ -31,7 +31,7 @@ module.exports = class extends Event {
 			if (command.disabled) {
 				message.reply({
 					content: [`\`${command.name}\` is globally disabled! Please check back later.` ].join('\n'),
-					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/8279tv63yt' }] }],
+					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 				});
 				return;
 			}
@@ -49,7 +49,7 @@ module.exports = class extends Event {
 					return command[foundSubcommand.name](message, args, customPrefix).catch((err) => {
 						message.reply({
 							content: [`Something went wrong with \`${command.name}\`'s \`${foundSubcommand.name}\` subcommand 😔` ].join('\n'),
-							components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/8279tv63yt' }] }],
+							components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 						});
 						console.log(err);
 						return;
@@ -63,7 +63,7 @@ module.exports = class extends Event {
 					content: [
 						`Something went wrong with \`${command.name}\` command 😔`,
 					].join('\n'),
-					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/8279tv63yt' }] }],
+					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
 				});
 				console.log(err);
 				return;
