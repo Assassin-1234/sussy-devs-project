@@ -4,6 +4,7 @@ const { promisify } = require('util');
 const glob = promisify(require('glob'));
 const Command = require('./CommandBase.js');
 const Event = require('./EventBase.js');
+const Interaction = require('./InteractionBase');
 const { Collection, MessageEmbed, Message } = require('discord.js');
 module.exports = class Tools {
 	constructor(client) {
@@ -21,8 +22,8 @@ module.exports = class Tools {
 	isClass(input) {
 		return (
 			typeof input === 'function' &&
-			typeof input.prototype === 'object' &&
-			input.toString().substring(0, 5) === 'class'
+      typeof input.prototype === 'object' &&
+      input.toString().substring(0, 5) === 'class'
 		);
 	}
 
@@ -47,14 +48,18 @@ module.exports = class Tools {
 		const hours = Math.floor(timeLeft / 3600000) - days * 24;
 		const minutes = Math.floor(timeLeft / 60000) - days * 1440 - hours * 60;
 		const seconds =
-			Math.floor(timeLeft / 1000) - days * 86400 - hours * 3600 - minutes * 60;
+      Math.floor(timeLeft / 1000) - days * 86400 - hours * 3600 - minutes * 60;
 		const mseconds =
-			timeLeft / 1000 - days * 86400 - hours * 3600 - minutes * 60;
+      timeLeft / 1000 - days * 86400 - hours * 3600 - minutes * 60;
 		let string = '';
 		if (days) string = string + `${days} ${days == 1 ? 'day' : 'days'}`;
 		if (hours) string = string + `${hours} ${hours == 1 ? 'hour' : 'hours'}`;
-		if (minutes) { string = string + `${minutes} ${minutes == 1 ? 'minute' : 'minutes'}`; }
-		if (seconds) { string = string + `${seconds} ${seconds == 1 ? 'second' : 'seconds'}`; }
+		if (minutes) {
+			string = string + `${minutes} ${minutes == 1 ? 'minute' : 'minutes'}`;
+		}
+		if (seconds) {
+			string = string + `${seconds} ${seconds == 1 ? 'second' : 'seconds'}`;
+		}
 		if (!string.length) string = `${mseconds.toFixed(1)} second`;
 		return string;
 	}
@@ -65,10 +70,14 @@ module.exports = class Tools {
 		}
 
 		if (command.userPerms) {
-			const missing = message.channel.permissionsFor(message.member).missing(command.userPerms);
+			const missing = message.channel
+				.permissionsFor(message.member)
+				.missing(command.userPerms);
 			if (missing.length) {
 				message.reply({
-					content: `You don't have \`${this.formatArray(missing.map(this.client.tools.formatPerms))}\` permission to run \`${command.name}\` command!`,
+					content: `You don't have \`${this.formatArray(
+						missing.map(this.client.tools.formatPerms),
+					)}\` permission to run \`${command.name}\` command!`,
 				});
 				return false;
 			}
@@ -77,10 +86,14 @@ module.exports = class Tools {
 			? this.client.defaultClientPerms.add(command.clientPerms)
 			: this.client.defaultClientPerms;
 		if (clientPermCheck) {
-			const missing = message.channel.permissionsFor(message.guild.me).missing(clientPermCheck);
+			const missing = message.channel
+				.permissionsFor(message.guild.me)
+				.missing(clientPermCheck);
 			if (missing.length) {
 				message.reply({
-					content: `I don't have \`${this.formatArray(missing.map(this.client.tools.formatPerms))}\` permission to run \`${command.name}\` command!`,
+					content: `I don't have \`${this.formatArray(
+						missing.map(this.client.tools.formatPerms),
+					)}\` permission to run \`${command.name}\` command!`,
 				});
 				return false;
 			}
@@ -91,7 +104,19 @@ module.exports = class Tools {
 				content: [
 					`\`${command.name}\` **is globally disabled! Please check back later**`,
 				].join('\n'),
-				components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
+				components: [
+					{
+						type: 1,
+						components: [
+							{
+								type: 2,
+								style: 5,
+								label: 'Support Server',
+								url: 'https://discord.gg/EcqW7SHWVR',
+							},
+						],
+					},
+				],
 			});
 			return false;
 		}
@@ -102,15 +127,19 @@ module.exports = class Tools {
 			}
 		}
 		else if (!message.client.subCommandsCooldowns.has(command.name)) {
-			await message.client.subCommandsCooldowns.set(command.name, new Collection());
+			await message.client.subCommandsCooldowns.set(
+				command.name,
+				new Collection(),
+			);
 		}
 
 		const now = Date.now();
-		const timestamps = !subCommand ? message.client.cooldowns.get(command.name) : message.client.subCommandsCooldowns.get(command.name);
+		const timestamps = !subCommand
+			? message.client.cooldowns.get(command.name)
+			: message.client.subCommandsCooldowns.get(command.name);
 		const cooldownAmount = command.cooldown;
 		if (timestamps.has(message.author.id)) {
-			const expirationTime =
-				timestamps.get(message.author.id) + cooldownAmount;
+			const expirationTime = timestamps.get(message.author.id) + cooldownAmount;
 			if (now < expirationTime) {
 				const timeLeft = this.timer(expirationTime);
 				message
@@ -125,17 +154,19 @@ module.exports = class Tools {
 		}
 
 		timestamps.set(message.author.id, now);
-		return setTimeout(() => timestamps.delete(message.author.id), cooldownAmount);
+		return setTimeout(
+			() => timestamps.delete(message.author.id),
+			cooldownAmount,
+		);
 	}
 	/**
-	* @param {Message} message - Message Object
-	* @param {String} prefix - Guild prefix
-	* @param {Object} comamnd - Comamnd ran
-	* @param {Number} missingIndex - Missing argument index
-	* @param {String} message - Error message
-	*/
+   * @param {Message} message - Message Object
+   * @param {String} prefix - Guild prefix
+   * @param {Object} comamnd - Comamnd ran
+   * @param {Number} missingIndex - Missing argument index
+   * @param {String} message - Error message
+   */
 	async missingArgs(message, prefix, command, missingIndex, errorReply) {
-
 		const mapped = command.usage.map((arg) => arg).join(' ');
 
 		const arrows = command.usage
@@ -147,21 +178,23 @@ module.exports = class Tools {
 			.join('');
 		const subExtra = command.parent ? command.parent.length + 1 : 0;
 		const codeBlock =
-			'```xml\n' +
-			`${prefix}${command.parent ? command.parent + ' ' : ''}${command.name} ${mapped}\n${' '.repeat(
-				subExtra + prefix.length + command.name.length + missingIndex,
-			)} ${arrows}\n${errorReply}` +
-			'```';
+      '```xml\n' +
+      `${prefix}${command.parent ? command.parent + ' ' : ''}${command.name} ${mapped}\n${' '.repeat(subExtra + prefix.length + command.name.length + missingIndex,
+      )} ${arrows}\n${errorReply}` +
+      '```';
 
 		return message.reply({
-			embeds: [new MessageEmbed()
-				.setAuthor(message.author.username, message.author.avatarURL({ dynamic: true }))
-				.setColor('RED')
-				.setDescription(codeBlock)
-				.addField('Example', `\`${prefix}${command.example}\``, false),
+			embeds: [
+				new MessageEmbed()
+					.setAuthor(
+						message.author.username,
+						message.author.avatarURL({ dynamic: true }),
+					)
+					.setColor('RED')
+					.setDescription(codeBlock)
+					.addField('Example', `\`${prefix}${command.example}\``, false),
 			],
 		});
-
 	}
 
 	async loadCommands() {
@@ -170,9 +203,13 @@ module.exports = class Tools {
 				delete require.cache[commandFile];
 				const { name } = path.parse(commandFile);
 				const File = require(commandFile);
-				if (!this.isClass(File)) { throw new TypeError(`Command ${name} doesn't export a class.`); }
+				if (!this.isClass(File)) {
+					throw new TypeError(`Command ${name} doesn't export a class.`);
+				}
 				const command = new File(this.client, name.toLowerCase());
-				if (!(command instanceof Command)) { throw new TypeError(`Command ${name} doesn't belong in Commands.`); }
+				if (!(command instanceof Command)) {
+					throw new TypeError(`Command ${name} doesn't belong in Commands.`);
+				}
 				this.client.commands.set(command.name, command);
 				if (command.aliases.length) {
 					for (const alias of command.aliases) {
@@ -182,6 +219,30 @@ module.exports = class Tools {
 			}
 		});
 	}
+	async loadInteractions() {
+		return glob(`${this.directory}/src/Interactions/**/*.js`).then(
+			(interactions) => {
+				for (const interactionFile of interactions) {
+					delete require.cache[interactionFile];
+					const { name } = path.parse(interactionFile);
+					const File = require(interactionFile);
+					if (!this.isClass(File)) {throw new TypeError(`Interaction ${name} doesn't export a class.`);}
+					const interaction = new File(this.client, name.toLowerCase());
+					if (!(interaction instanceof Interaction)) {
+						throw new TypeError(
+							`Interaction ${name} doesn't belong in Interactions directory.`,
+						);
+					}
+					this.client.interactions.set(interaction.name, interaction);
+					this.client.devMode
+						? this.client.guilds.cache
+							.get('873573318836490280')
+							.commands.create(interaction)
+						: this.client.application?.commands.create(interaction);
+				}
+			},
+		);
+	}
 
 	async loadEvents() {
 		return glob(`${this.directory}/src/Events/**/*.js`).then((events) => {
@@ -189,7 +250,9 @@ module.exports = class Tools {
 				delete require.cache[eventFile];
 				const { name } = path.parse(eventFile);
 				const File = require(eventFile);
-				if (!this.isClass(File)) { throw new TypeError(`Event ${name} doesn't export a class!`); }
+				if (!this.isClass(File)) {
+					throw new TypeError(`Event ${name} doesn't export a class!`);
+				}
 				const event = new File(this.client, name);
 				if (!(event instanceof Event)) {
 					throw new TypeError(

@@ -23,7 +23,7 @@ module.exports = class BotClient extends Client {
 
 		this.commands = new Collection();
 		this.aliases = new Collection();
-		this.slashCommands = new Collection();
+		this.interactions = new Collection();
 
 		this.events = new Collection();
 
@@ -33,23 +33,36 @@ module.exports = class BotClient extends Client {
 
 		this.utils = new Utils(this);
 		this.db = new BotDatabase(this);
-
 	}
 
 	validate(options) {
-		if (typeof options !== 'object') { throw new TypeError('Options should be a type of Object.'); }
+		if (typeof options !== 'object') {
+			throw new TypeError('Options should be a type of Object.');
+		}
 
-		if (!options.token) {throw new Error('You must pass the token for the client.');}
+		if (!options.token) {
+			throw new Error('You must pass the token for the client.');
+		}
 		this.token = options.token;
 
-		if (typeof options.prefix !== 'string') {throw new TypeError('Prefix should be a type of String.');}
+		if (typeof options.prefix !== 'string') {
+			throw new TypeError('Prefix should be a type of String.');
+		}
 		this.prefix = options.prefix;
 
-		if (!options.developers) {throw new Error('You must pass a developer id(s) for the client.');}
+		if (!options.developers) {
+			throw new Error('You must pass a developer id(s) for the client.');
+		}
 		this.developers = options.developers;
 
-		if (!options.defaultClientPerms) {throw new Error('You must pass default permissions for the client.');}
-		this.defaultClientPerms = new Permissions(options.defaultClientPerms).freeze();
+		if (!options.defaultClientPerms) {
+			throw new Error('You must pass default permissions for the client.');
+		}
+		this.defaultClientPerms = new Permissions(
+			options.defaultClientPerms,
+		).freeze();
+
+		this.devMode = options.devmode;
 	}
 
 	async connect(token = this.token) {

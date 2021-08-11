@@ -8,12 +8,19 @@ module.exports = class extends Event {
 	}
 
 	async run() {
+		this.client.utils.loadInteractions();
+
+		await this.client.utils.sleep(500);
 		console.log(
 			[
 				`Logged in as ${this.client.user.tag}`,
-				`Loaded ${this.client.commands.size} commands & ${this.client.events.size} events!`,
-				`Ready in ${this.client.guilds.cache.size} guilds on ${this.client.channels.cache.size} channels, for a total of ${this.client.guilds.cache
-					.reduce((a, b) => a + b.memberCount, 0)} users.`,
+				`Loaded ${this.client.commands.size} commands & ${this.client.events.size} events & ${this.client.interactions.size} interactions!`,
+				`Ready in ${this.client.guilds.cache.size} guilds on ${
+					this.client.channels.cache.size
+				} channels, for a total of ${this.client.guilds.cache.reduce(
+					(a, b) => a + b.memberCount,
+					0,
+				)} users.`,
 			].join('\n'),
 		);
 

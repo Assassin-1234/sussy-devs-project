@@ -4,7 +4,6 @@ const Event = require('../Structures/EventBase');
 
 module.exports = class extends Event {
 	async run(message) {
-
 		const mentionRegexPrefix = RegExp(`^<@!?${this.client.user.id}> `);
 
 		if (!message.guild || message.author.bot) return;
@@ -13,7 +12,9 @@ module.exports = class extends Event {
 
 		if (guildData.blacklist.state === true) return;
 
-		const customPrefix = guildData.prefix ? guildData.prefix : this.client.prefix;
+		const customPrefix = guildData.prefix
+			? guildData.prefix
+			: this.client.prefix;
 
 		const prefix = message.content.match(mentionRegexPrefix)
 			? message.content.match(mentionRegexPrefix)[0]
@@ -21,17 +22,33 @@ module.exports = class extends Event {
 
 		if (!message.content.startsWith(prefix)) return;
 
-		const [cmd, ...args] = message.content.slice(prefix.length).trim().split(/ +/g);
+		const [cmd, ...args] = message.content
+			.slice(prefix.length)
+			.trim()
+			.split(/ +/g);
 
 		const command =
-            this.client.commands.get(cmd.toLowerCase()) ||
-            this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
+      this.client.commands.get(cmd.toLowerCase()) ||
+      this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
-
 			if (command.disabled) {
 				message.reply({
-					content: [`\`${command.name}\` is globally disabled! Please check back later.` ].join('\n'),
-					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
+					content: [
+						`\`${command.name}\` is globally disabled! Please check back later.`,
+					].join('\n'),
+					components: [
+						{
+							type: 1,
+							components: [
+								{
+									type: 2,
+									style: 5,
+									label: 'Support Server',
+									url: 'https://discord.gg/EcqW7SHWVR',
+								},
+							],
+						},
+					],
 				});
 				return;
 			}
@@ -40,16 +57,40 @@ module.exports = class extends Event {
 				const subcommand = args.slice().shift().toLowerCase();
 
 				const foundSubcommand = command.subCommands.find((subCmd) => {
-					return subCmd.name === subcommand || subCmd.aliases?.includes(subcommand);
+					return (
+						subCmd.name === subcommand || subCmd.aliases?.includes(subcommand)
+					);
 				});
 
 				if (foundSubcommand) {
-					const check = await this.client.utils.checkCommand(message, foundSubcommand, true);
+					const check = await this.client.utils.checkCommand(
+						message,
+						foundSubcommand,
+						true,
+					);
 					if (check === false) return;
-					return command[foundSubcommand.name](message, args, customPrefix).catch((err) => {
+					return command[foundSubcommand.name](
+						message,
+						args,
+						customPrefix,
+					).catch((err) => {
 						message.reply({
-							content: [`Something went wrong with \`${command.name}\`'s \`${foundSubcommand.name}\` subcommand 😔` ].join('\n'),
-							components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
+							content: [
+								`Something went wrong with \`${command.name}\`'s \`${foundSubcommand.name}\` subcommand 😔`,
+							].join('\n'),
+							components: [
+								{
+									type: 1,
+									components: [
+										{
+											type: 2,
+											style: 5,
+											label: 'Support Server',
+											url: 'https://discord.gg/EcqW7SHWVR',
+										},
+									],
+								},
+							],
 						});
 						console.log(err);
 						return;
@@ -63,11 +104,38 @@ module.exports = class extends Event {
 					content: [
 						`Something went wrong with \`${command.name}\` command 😔`,
 					].join('\n'),
-					components: [{ type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/EcqW7SHWVR' }] }],
+					components: [
+						{
+							type: 1,
+							components: [
+								{
+									type: 2,
+									style: 5,
+									label: 'Support Server',
+									url: 'https://discord.gg/EcqW7SHWVR',
+								},
+							],
+						},
+					],
 				});
 				console.log(err);
 				return;
 			});
+		}
+		else {
+			const leven = require('../Utilities/Leven');
+			const best = [
+				...this.client.commands.map((cmde) => cmde.name),
+				...this.client.aliases.keys(),
+			].filter(
+				(c) => leven(cmd.toLowerCase(), c.toLowerCase()) < c.length * 0.4,
+			);
+			const dym = best.length == 0 ? '' : best.length == 1 ? `- ${cmd}\n+ ${best[0]}` : `${best.slice(0, 3).map((value) => `- ${cmd}\n+ ${value}`).join('\n')}`;
+			return dym
+				? message.channel.send({
+					content: `Invalid command! Maybe you meant this command: \n \`\`\`diff\n${dym}\`\`\``,
+				})
+				: null;
 		}
 	}
 };
