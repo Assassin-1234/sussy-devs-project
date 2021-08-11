@@ -28,6 +28,7 @@
     "discord.js": "^13.0.0-dev.07017a9.1626869177",
     "dotenv": "^10.0.0",
     "glob": "^7.1.7",
-    "goosecache": "^9.0.14"
+    "goosecache": "^9.0.14",
+    "node-fetch": "^2.6.1"
   }
 }
