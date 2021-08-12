@@ -38,7 +38,15 @@ const Guilds = new Schema({
 	whitelists: {
 		type: Object,
 		default: {
-			antiLinks: [],
+			antiLinks: {
+				channels: [],
+				roles: [],
+				servers: [],
+			},
+			CapsThreshold: {
+				channels: [],
+				roles: [],
+			},
 		},
 	},
 	actions: {
