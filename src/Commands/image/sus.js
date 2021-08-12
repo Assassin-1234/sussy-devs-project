@@ -1,5 +1,5 @@
 const Command = require('../../Structures/CommandBase');
-const { Permissions, MessageAttachment } = require('discord.js');
+const { MessageAttachment } = require('discord.js');
 const Canvas = require('canvas');
 class sus extends Command {
 	constructor(...args) {
@@ -10,16 +10,6 @@ class sus extends Command {
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
-			subCommands: [
-				{
-					name: 'user',
-					description: 'User to make sus',
-					clientPerms: [Permissions.FLAGS.ATTACH_FILES],
-					devsOnly: false,
-					disabled: false,
-					cooldown: 3000,
-				},
-			],
 		});
 	}
 
