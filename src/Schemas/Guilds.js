@@ -27,6 +27,28 @@ const Guilds = new Schema({
 			default: 0,
 		},
 	},
+	config: {
+		type: Object,
+		default: {
+			AntiLinks: false,
+			AntiRaid: false,
+			CapsThreshold: 0,
+		},
+	},
+	whitelists: {
+		type: Object,
+		default: {
+			antiLinks: [],
+		},
+	},
+	actions: {
+		type: Object,
+		default: {
+			AntiLinks: 'delete',
+			AntiRaid: 'kick',
+			CapsThresHold: 'kick',
+		},
+	},
 });
 
 module.exports = model('Guilds', Guilds);
