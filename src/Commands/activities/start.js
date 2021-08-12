@@ -76,7 +76,7 @@ class start extends Command {
 				validate: null,
 			}),
 			headers: {
-				'Authorization': 'Bot ODczNTcyNzI3OTUxMzU1OTI0.YQ6YAA.FgQZBBOXqlidLiI3UsMY4xSVEsk',
+				'Authorization': `Bot ${this.client.token}`,
 				'Content-Type': 'application/json',
 			},
 		})
@@ -127,7 +127,7 @@ class start extends Command {
 				validate: null,
 			}),
 			headers: {
-				'Authorization': 'Bot ODczNTcyNzI3OTUxMzU1OTI0.YQ6YAA.FgQZBBOXqlidLiI3UsMY4xSVEsk',
+				'Authorization': `Bot ${this.client.token}`,
 				'Content-Type': 'application/json',
 			},
 		})
@@ -177,7 +177,7 @@ class start extends Command {
 				validate: null,
 			}),
 			headers: {
-				'Authorization': 'Bot ODczNTcyNzI3OTUxMzU1OTI0.YQ6YAA.FgQZBBOXqlidLiI3UsMY4xSVEsk',
+				'Authorization': `Bot ${this.client.token}`,
 				'Content-Type': 'application/json',
 			},
 		})
