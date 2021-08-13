@@ -264,4 +264,16 @@ module.exports = class Tools {
 			}
 		});
 	}
+	async ErrorEmbed(message, description) {
+		message.reply({ embeds:
+				new MessageEmbed()
+					.setAuthor(
+						message.author.username,
+						message.author.avatarURL({ dynamic: true }),
+					)
+					.setTitle('Encountered an error ...')
+					.setColor('RED')
+					.setDescription(description),
+		});
+	}
 };
