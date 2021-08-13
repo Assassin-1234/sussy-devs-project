@@ -57,6 +57,20 @@ const Guilds = new Schema({
 			CapsThresHold: 'kick',
 		},
 	},
+	roles: {
+		staffroles: {
+			type: Array,
+			default: [],
+		},
+		muterole: {
+			type: String,
+			default: 'null',
+		},
+		quarantineRole: {
+			type: String,
+			default: 'null',
+		},
+	},
 });
 
 module.exports = model('Guilds', Guilds);
