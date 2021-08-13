@@ -59,8 +59,8 @@ const Guilds = new Schema({
 	},
 	roles: {
 		staffroles: {
-			type: Array,
-			default: [],
+			type: String,
+			default: 'null',
 		},
 		muterole: {
 			type: String,
