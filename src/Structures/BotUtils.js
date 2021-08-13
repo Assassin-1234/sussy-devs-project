@@ -276,4 +276,16 @@ module.exports = class Tools {
 					.setDescription(description),
 		});
 	}
+	async SuccessEmbed(message, description) {
+		message.reply({ embeds:
+				new MessageEmbed()
+					.setAuthor(
+						message.author.username,
+						message.author.avatarURL({ dynamic: true }),
+					)
+					.setTitle('Success')
+					.setColor('GREEN')
+					.setDescription(description),
+		});
+	}
 };
