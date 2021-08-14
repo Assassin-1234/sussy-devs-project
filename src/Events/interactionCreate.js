@@ -7,7 +7,7 @@ module.exports = class extends Event {
 		if (interaction.isCommand()) {
 			await this.client.application?.commands
 				.fetch(interaction.commandId)
-				.catch(() => { });
+				.catch((e) => { console.log(e);});
 			if (!interaction.guildId) return;
 			try {
 				const command = this.client.interactions.get(interaction.command?.name);
