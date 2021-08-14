@@ -6,7 +6,7 @@ class start extends Command {
 	constructor(...args) {
 		super(...args, {
 			aliases: ['start activity'],
-			description: 'pong!!',
+			description: 'start activties',
 			category: 'activities',
 			devsOnly: false,
 			disabled: false,
