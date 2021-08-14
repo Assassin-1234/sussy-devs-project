@@ -37,6 +37,16 @@ class AntiCaps extends Command {
 					disabled: false,
 					cooldown: 1000,
 				},
+				{
+					name: 'whitelist',
+					parent: 'anticaps',
+					usage: ['<type> <ID>'],
+					description: 'whitelist a role / channel from anticaps module',
+					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
+					devsOnly: false,
+					disabled: false,
+					cooldown: 3000,
+				},
 			],
 		});
 	}
@@ -85,6 +95,42 @@ class AntiCaps extends Command {
 		message.reply({ embeds: [
 			this.client.utils.successEmbed(message, 'successfully disabled Anti Caps. Caps threshold set to `0`'),
 		] });
+	}
+	async whitelist(message, args, prefix) {
+		const data = await schema.findOne({ guildId: message.guild.id });
+		if(data.config.AntiCaps == false) {
+			return message.reply({ embeds: [
+				this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
+			] });
+		}
+		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 1, 'please provide a type. i.e role / channel');
+
+		if(args[1].toLowerCase() === 'role') {
+			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			const role = message.guild.roles.cache.get(args[2]);
+			if(!role) {
+				return message.reply({
+					embeds: [
+						this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+					],
+				});
+			}
+			if(role) data.whitelists.CapsThreshold.roles.push(role.id);
+		}
+		if(args[1].toLowerCase() === 'channel') {
+			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			const channel = message.guild.channels.cache.get(args[2]);
+			if(!channel) {
+				return message.reply({
+					embeds: [
+						this.client.utils.ErrorEmbed(message, 'channel ID is not valid'),
+					],
+				});
+			}
+			if(channel) data.whitelists.CapsThreshold.channel.push(channel.id);
+		}
+		data.save();
+		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
 
 }
