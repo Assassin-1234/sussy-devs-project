@@ -34,6 +34,7 @@ const Guilds = new Schema({
 			AntiRaid: false,
 			AntiCaps: false,
 			CapsThreshold: 0,
+			AutoQuarantine: false,
 		},
 	},
 	whitelists: {
