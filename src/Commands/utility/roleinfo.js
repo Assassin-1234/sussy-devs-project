@@ -21,7 +21,7 @@ class roleinfo extends Command {
    */
 
 	async run(message, args) {
-		const role = message.mentions.roles.first();
+		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
 		if (!role) return message.reply({ content: '**Please Enter A Valid Role!**' });
 
 		const status = {
@@ -34,12 +34,12 @@ class roleinfo extends Command {
 			.setTitle(`Role Info: \`[  ${role.name}  ]\``)
 			.setThumbnail(message.guild.iconURL())
 			.addField('**ID**', `\`${role.id}\``, true)
-			.addField('**Name**', role.name, true)
-			.addField('**Hex**', role.hexColor, true)
-			.addField('**Members**', role.members.size, true)
-			.addField('**Position**', role.position, true)
-			.addField('**Mentionable**', status[role.mentionable], true)
-			.setFooter(message.member.displayName, message.author.displayAvatarURL(), true);
+			.addField('**Name**', role.name.toString(), true)
+			.addField('**Hex**', role.hexColor.toString(), true)
+			.addField('**Members**', role.members.size.toString(), true)
+			.addField('**Position**', role.position.toString(), true)
+			.addField('**Mentionable**', status[role.mentionable].toString(), true)
+			.setFooter(message.member.displayName.toString(), message.author.displayAvatarURL(), true);
 		message.reply({ embeds: [roleembed] });
 	}
 
