@@ -18,7 +18,7 @@ module.exports = class BotClient extends Client {
 				UserManager: 0,
 			}),
 		});
-
+		console.log(options)
 		this.validate(options);
 
 		this.commands = new Collection();
@@ -32,7 +32,7 @@ module.exports = class BotClient extends Client {
 		this.slashCooldowns = new Collection();
 
 		this.utils = new Utils(this);
-		this.db = new BotDatabase(this);
+		/* this.db = new BotDatabase(this); */
 	}
 
 	validate(options) {
@@ -66,7 +66,7 @@ module.exports = class BotClient extends Client {
 	}
 
 	async connect(token = this.token) {
-		this.db.loadDatabase();
+		/* this.db.loadDatabase(); */
 		this.utils.loadEvents();
 		this.utils.loadCommands();
 		await super.login(token);
