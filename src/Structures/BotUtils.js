@@ -265,27 +265,41 @@ module.exports = class Tools {
 		});
 	}
 	async ErrorEmbed(message, description) {
-		message.reply({ embeds:
-				new MessageEmbed()
-					.setAuthor(
-						message.author.username,
-						message.author.avatarURL({ dynamic: true }),
-					)
-					.setTitle('Encountered an error ...')
-					.setColor('RED')
-					.setDescription(description),
-		});
+		const embed = new MessageEmbed()
+			.setAuthor(
+				message.author.username,
+				message.author.avatarURL({ dynamic: true }),
+			)
+			.setTitle('Encountered an error ...')
+			.setColor('RED')
+			.setDescription(description);
+		return embed;
 	}
 	async SuccessEmbed(message, description) {
-		message.reply({ embeds:
-				new MessageEmbed()
-					.setAuthor(
-						message.author.username,
-						message.author.avatarURL({ dynamic: true }),
-					)
-					.setTitle('Success')
-					.setColor('GREEN')
-					.setDescription(description),
-		});
+		const embed = new MessageEmbed()
+			.setAuthor(
+				message.author.username,
+				message.author.avatarURL({ dynamic: true }),
+			)
+			.setTitle('Success')
+			.setColor('GREEN')
+			.setDescription(description);
+		return embed;
+	}
+	async doAction(message, action, user, reason, guildData) {
+		switch (action) {
+		case 'kick':
+			user.kick({ reason: reason });
+			break;
+		case 'ban':
+			user.ban({ reason: reason });
+			break;
+		case 'mute':
+			message.member.roles.cache.add(guildData.roles.muterole);
+			break;
+		case 'delete':
+			message.delete();
+			break;
+		}
 	}
 };

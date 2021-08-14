@@ -59,15 +59,13 @@ class Set extends Command {
 	}
 	async muterole(message, args, prefix) {
 		if(!args[1]) return this.client.utils.missingArgs(message, prefix, this.subCommands.find(x => x.name === 'muterole'), 1, 'please provide the muterole or the --create flag to create!');
-		const data = await schema.findOne({ GuildId: message.guild.id });
+		const data = await schema.findOne({ guildId: message.guild.id });
 		if(args[1] === '--create') {
 			try {
 				const muteRoleId = await message.guild.roles.create({
-					data: {
-						name: 'Muted',
-						color: '#484848',
-						permissions: [],
-					},
+					name: 'Muted',
+					color: '#484848',
+					permissions: [],
 					reason: '--create flag was used while setting the muterole',
 				});
 
@@ -77,33 +75,54 @@ class Set extends Command {
 						ADD_REACTIONS: false,
 					});
 				});
-				data.roles.muterole = muteRoleId;
+				data.roles.muterole = muteRoleId.id;
 				data.save();
-				message.reply(this.client.utils.SuccessEmbed(message, `Successfully created the muterole! <@${muteRoleId}>`));
+				message.reply({
+					embeds: [
+						await this.client.utils.SuccessEmbed(message, `Successfully created the muterole! ${muteRoleId}`),
+					],
+				});
 			}
 			catch (e) {
 				console.log(e.stack);
-				this.client.utils.errorEmbed(message, e);
+				message.reply({
+					embeds: [
+						await this.client.utils.ErrorEmbed(message, e),
+					],
+				});
 			}
+			return;
 		}
 		const role = await message.guild.roles.cache.get(args[1]);
-		if(!role) return message.reply(this.client.utils.errorEmbed(message, 'role ID is not valid'));
+		if(!role) {
+			return message.reply({
+				embeds: [
+					await this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+				],
+			});
+		}
 		data.roles.muterole = args[1];
-		data.roles.muterole == 'null' ? message.reply(this.client.utils.SuccessEmbed(message, `successfully set the mute role to \`${role.name}\``)) : message.reply(this.client.utils.SuccessEmbed(message, `successfully changed the mute role to \`${role.name}\``));
+		data.roles.muterole == 'null' ? message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully set the mute role to \`${role.name}\``),
+			],
+		}) : message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully changed the mute role to \`${role.name}\``),
+			],
+		});
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
 	async quarantinerole(message, args, prefix) {
 		if(!args[1]) return this.client.utils.missingArgs(message, prefix, this.subCommands.find(x => x.name === 'quarantinerole'), 1, 'please provide the quarantinerole or the --create flag to create!');
-		const data = await schema.findOne({ GuildId: message.guild.id });
+		const data = await schema.findOne({ guildId: message.guild.id });
 		if(args[1] === '--create') {
 			try {
 				const quarantinerole = await message.guild.roles.create({
-					data: {
-						name: 'quarantined',
-						color: '#484848',
-						permissions: [],
-					},
+					name: 'quarantined',
+					color: '#484848',
+					permissions: [],
 					reason: '--create flag was used while setting the quarantinerole',
 				});
 
@@ -113,48 +132,92 @@ class Set extends Command {
 						ADD_REACTIONS: false,
 					});
 				});
-				data.roles.quarantinerole = quarantinerole;
+				data.roles.quarantinerole = quarantinerole.id;
 				data.save();
-				message.reply(this.client.utils.SuccessEmbed(message, `Successfully created the quarantine role! <@${quarantinerole}>`));
+				message.reply({
+					embeds: [
+						await this.client.utils.SuccessEmbed(message, `Successfully created the quarantine role! ${quarantinerole}`),
+					],
+				});
+
 			}
 			catch (e) {
 				console.log(e.stack);
-				this.client.utils.errorEmbed(message, e);
+				message.reply({
+					embeds: [
+						await this.client.utils.ErrorEmbed(message, e),
+					],
+				});
 			}
+			return;
 		}
 		const role = await message.guild.roles.cache.get(args[1]);
-		if(!role) return message.reply(this.client.utils.errorEmbed(message, 'role ID is not valid'));
+		if(!role) {
+			return message.reply({
+				embeds: [
+					await this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+				],
+			});
+		}
 		data.roles.quarantinerole = args[1];
-		data.roles.quarantinerole == 'null' ? message.reply(this.client.utils.SuccessEmbed(message, `successfully set the quarantinerole to \`${role.name}\``)) : message.reply(this.client.utils.SuccessEmbed(message, `successfully changed the quarantine role to \`${role.name}\``));
+		data.roles.quarantinerole == 'null' ? message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully set the quarantinerole to \`${role.name}\``),
+			],
+		}) : message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully changed the quarantine role to \`${role.name}\``),
+			],
+		});
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
 	async staffrole(message, args, prefix) {
 		if(!args[1]) return this.client.utils.missingArgs(message, prefix, this.subCommands.find(x => x.name === 'staffrole'), 1, 'please provide the staff role or the --create flag to create!');
-		const data = await schema.findOne({ GuildId: message.guild.id });
+		const data = await schema.findOne({ guildId: message.guild.id });
 		if(args[1] === '--create') {
 			try {
 				const staffrole = await message.guild.roles.create({
-					data: {
-						name: 'staff',
-						color: '#ffffff',
-						permissions: [],
-					},
+					name: 'staff',
+					color: '#ffffff',
+					permissions: [],
 					reason: '--create flag was used while setting the staff role',
 				});
-				data.roles.staffrole = staffrole;
+				data.roles.staffrole = staffrole.id;
 				data.save();
-				message.reply(this.client.utils.SuccessEmbed(message, `Successfully created the staff role! <@${staffrole}>`));
+				message.reply({
+					embeds: [
+						await this.client.utils.SuccessEmbed(message, `Successfully created the staff role! ${staffrole}`),
+					],
+				});
 			}
 			catch (e) {
 				console.log(e.stack);
-				this.client.utils.errorEmbed(message, e);
+				message.reply({
+					embeds: [
+						await this.client.utils.ErrorEmbed(message, e),
+					],
+				});
 			}
+			return;
 		}
 		const role = await message.guild.roles.cache.get(args[1]);
-		if(!role) return message.reply(this.client.utils.errorEmbed(message, 'role ID is not valid'));
-		data.roles.staffrole = args[1];
-		data.roles.staffrole == 'null' ? message.reply(this.client.utils.SuccessEmbed(message, `successfully set the staff role to \`${role.name}\``)) : message.reply(this.client.utils.SuccessEmbed(message, `successfully changed the staff role to \`${role.name}\``));
+		if(!role) {
+			return message.reply({
+				embeds: [
+					await this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+				],
+			});
+		}		data.roles.staffrole = args[1];
+		data.roles.staffrole == 'null' ? message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully set the staff role to \`${role.name}\``),
+			],
+		}) : message.reply({
+			embeds: [
+				await this.client.utils.SuccessEmbed(message, `successfully changed the staff role to \`${role.name}\``),
+			],
+		});
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
