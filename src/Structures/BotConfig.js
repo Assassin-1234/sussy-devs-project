@@ -16,5 +16,5 @@ module.exports = {
 		Permissions.FLAGS.VIEW_CHANNEL,
 		Permissions.FLAGS.READ_MESSAGE_HISTORY,
 	],
-	devmode: true,
+	devMode: true,
 };
