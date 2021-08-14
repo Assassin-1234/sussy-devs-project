@@ -18,7 +18,6 @@ module.exports = class BotClient extends Client {
 				UserManager: 0,
 			}),
 		});
-		console.log(options)
 		this.validate(options);
 
 		this.commands = new Collection();

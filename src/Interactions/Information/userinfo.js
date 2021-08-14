@@ -18,7 +18,7 @@ module.exports = class userinfo extends InteractionBase {
 
 	async run(interaction, args) {
 		if (interaction.inGuild()) {
-			let member = interaction.options.getMember("user")
+			let member = interaction.options.getMember('user');
 			let user;
 			if (member) {
 				user = member.user;
