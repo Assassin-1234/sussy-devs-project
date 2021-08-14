@@ -17,4 +17,8 @@ module.exports = {
 		Permissions.FLAGS.READ_MESSAGE_HISTORY,
 	],
 	devmode: true,
+	dashboard: process.env.DASHBOARD_URL,
+	port: process.env.PORT || 3000,
+	id: process.env.BOT_ID,
+	secret: process.env.BOT_SECRET,
 };
