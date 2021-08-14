@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 // const { MessageEmbed } = require('discord.js');
+const { doAction } = require('../Structures/BotUtils');
 const Event = require('../Structures/EventBase');
 
 module.exports = class extends Event {
@@ -19,6 +20,35 @@ module.exports = class extends Event {
 		const prefix = message.content.match(mentionRegexPrefix)
 			? message.content.match(mentionRegexPrefix)[0]
 			: customPrefix;
+
+		const msgArray = message.content.split(' ');
+
+		if(guildData.config.AntiLinks) {
+			if(guildData.whitelists.AntiLinks.channel.includes(message.channel.id) || guildData.whitelists.AntiLinks.roles.forEach(e => message.member.roles.cache.has(e))) return;
+			const regex = /(https?:\/\/)?(www\.)?(discord\.(gg|io|me|li|club)|discordapp\.com\/invite|discord\.com\/invite|dsc\.gg)\/.+[a-z]/gi;
+			msgArray.forEach(async msg => {
+				if(regex.test(msg)) {
+					const action = guildData.actions.AntiLinks;
+					await doAction(message, action, message.member, 'posting links', guildData);
+				}
+			});
+		}
+
+		if(guildData.config.CapsThreshold) {
+			if(guildData.whitelists.CapsThreshold.channel.includes(message.channel.id) || guildData.whitelists.CapsThreshold.roles.forEach(e => message.member.roles.cache.has(e))) return;
+			const threshold = guildData.config.CapsThreshold;
+			const percentage = Math.round((threshold / 100) * msgArray.length);
+			const words = [];
+			msgArray.forEach(msg => {
+				if(msg == msg.toUpperCase()) {
+					words.push(msg);
+				}
+			});
+			if(words.length >= percentage) {
+				const action = guildData.actions.CapsThresHold;
+				await doAction(message, action, message.member, 'excessive caps', guildData);
+			}
+		}
 
 		if (!message.content.startsWith(prefix)) return;
 

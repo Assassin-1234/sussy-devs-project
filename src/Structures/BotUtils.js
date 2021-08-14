@@ -286,4 +286,20 @@ module.exports = class Tools {
 			.setDescription(description);
 		return embed;
 	}
+	async doAction(message, action, user, reason, guildData) {
+		switch (action) {
+		case 'kick':
+			user.kick({ reason: reason });
+			break;
+		case 'ban':
+			user.ban({ reason: reason });
+			break;
+		case 'mute':
+			message.member.roles.cache.add(guildData.roles.muterole);
+			break;
+		case 'delete':
+			message.delete();
+			break;
+		}
+	}
 };
