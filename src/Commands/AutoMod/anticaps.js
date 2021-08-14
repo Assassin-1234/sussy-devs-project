@@ -94,7 +94,7 @@ class AntiCaps extends Command {
 	}
 	async disable(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiLinks == false) {
+		if(data.config.AntiCaps == false) {
 			return message.reply({ embeds: [
 				this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
