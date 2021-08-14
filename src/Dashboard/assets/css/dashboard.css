@@ -1,0 +1,17 @@
+.chart-container {
+  resize: "horizontal";
+  overflow: "hidden";
+  width: "100%";
+  height: "100%";
+}
+.mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+}
+[dir="rtl"] .mat-form-field {
+  text-align: right;
+}
+.mat-input {
+  color: #37373a;
+}
