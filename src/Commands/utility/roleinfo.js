@@ -21,8 +21,8 @@ class roleinfo extends Command {
    */
 
 	async run(message, args) {
-		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]) || message.guild.roles.cache.find(r => r.name.toLowerCase() === args.join(' ').toLocaleLowerCase());
-		if (!role) return message.lineReplyNoMention('**Please Enter A Valid Role!**');
+		const role = message.mentions.roles.first();
+		if (!role) return message.reply({ content: '**Please Enter A Valid Role!**' });
 
 		const status = {
 			false: 'No',
