@@ -7,7 +7,7 @@ class AntiLinks extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'interact with the antilinks module to keep your server safer!',
-			category: 'Information',
+			category: 'AutoMod',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
@@ -124,6 +124,26 @@ class AntiLinks extends Command {
 		}
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
+	}
+	async actions(message, args, prefix) {
+		const data = await schema.findOne({ guildId: message.guild.id });
+		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'actions'), 1, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
+		if(!['ban', 'kick', 'mute', 'quarantine'].includes(args[1].toLowerCase())) {
+			return message.reply({
+				embeds: [
+					this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine'),
+				],
+			});
+		}
+		else {
+			data.actions.AntiLinks = args[1].toLowerCase();
+			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
+			message.reply({
+				embeds: [
+					this.client.utils.successEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
+				],
+			});
+		}
 	}
 
 }

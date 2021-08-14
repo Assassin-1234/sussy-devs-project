@@ -7,7 +7,7 @@ class AntiCaps extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'interact with the anticaps module to keep your server safer!',
-			category: 'Information',
+			category: 'AutoMod',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
@@ -41,6 +41,16 @@ class AntiCaps extends Command {
 					parent: 'anticaps',
 					usage: ['<type> <ID>'],
 					description: 'whitelist a role / channel from anticaps module',
+					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
+					devsOnly: false,
+					disabled: false,
+					cooldown: 3000,
+				},
+				{
+					name: 'action',
+					parent: 'anticaps',
+					usage: ['<action>'],
+					description: 'set the action which is performed on exceeding the threshold',
 					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
 					devsOnly: false,
 					disabled: false,
@@ -144,6 +154,26 @@ class AntiCaps extends Command {
 		}
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
+	}
+	async actions(message, args, prefix) {
+		const data = await schema.findOne({ guildId: message.guild.id });
+		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'actions'), 1, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
+		if(!['ban', 'kick', 'mute', 'quarantine', 'delete'].includes(args[1].toLowerCase())) {
+			return message.reply({
+				embeds: [
+					this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine/delete'),
+				],
+			});
+		}
+		else {
+			data.actions.AntiCaps = args[1].toLowerCase();
+			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
+			message.reply({
+				embeds: [
+					this.client.utils.successEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
+				],
+			});
+		}
 	}
 
 }
