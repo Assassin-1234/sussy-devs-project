@@ -55,7 +55,7 @@ const Guilds = new Schema({
 		default: {
 			AntiLinks: 'delete',
 			AntiRaid: 'kick',
-			CapsThresHold: 'kick',
+			CapsThresHold: 'delete',
 		},
 	},
 	roles: {
