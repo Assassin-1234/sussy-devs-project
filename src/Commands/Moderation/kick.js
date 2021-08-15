@@ -24,15 +24,15 @@ class Kick extends Command {
 		if (!message.member.permissions.has('KICK_MEMBERS')) return message.reply({ content: 'You don\'t have the permission to do that!' });
 		const reason = (args.find(x => x.name === 'reason')?.value || 'No reason supplied.') + `\nModerator: ${message.user.tag} | ${message.user.id}`;
 		const user = message.guild.members.cache.get(args.find(x => x.name === 'user').value);
-		if (user.id === message.author.id) return message.reply('I can\'t let you do that bruh 😐');
-		if (user.id === this.client.user.id) return message.reply('I refuse to be kicked');
+		if (user.id === message.author.id) return message.reply({ content: 'I can\'t let you do that bruh 😐' });
+		if (user.id === this.client.user.id) return message.reply({ content: 'I refuse to be kicked' });
 		const botRolePossition = message.guild.me.roles.highest.position;
 		const rolePosition = message.guild.members.cache.get(user.id).roles.highest.position;
 		const userRolePossition = message.member.roles.highest.position;
-		if (userRolePossition <= rolePosition) return message.reply('Cannot kick that member because they have roles that is higher or equal to you.');
-		if (botRolePossition <= rolePosition) return message.reply('Cannot kick that member because they have roles that is higher or equal to me.');
+		if (userRolePossition <= rolePosition) return message.reply({ content: 'Cannot kick that member because they have roles that is higher or equal to you.' });
+		if (botRolePossition <= rolePosition) return message.reply({ content: 'Cannot kick that member because they have roles that is higher or equal to me.' });
 		if (!user.kickable) {
-			message.reply('I cannot kick that member. My role might not be high enough or it\'s an internal error.');
+			message.reply({ content: 'I cannot kick that member. My role might not be high enough or it\'s an internal error.' });
 			return;
 		}
 		else {
