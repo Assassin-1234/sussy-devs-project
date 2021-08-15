@@ -2,7 +2,7 @@
 const Command = require('../../Structures/CommandBase');
 const { Permissions, Message, MessageEmbed } = require('discord.js');
 
-class Ping extends Command {
+class Kick extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'kick a user!!',
@@ -45,4 +45,4 @@ class Ping extends Command {
 	}
 }
 
-module.exports = Ping;
+module.exports = Kick;
