@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const Command = require('../../Structures/CommandBase');
 const { MessageAttachment, Message } = require('discord.js');
 const Canvas = require('canvas');

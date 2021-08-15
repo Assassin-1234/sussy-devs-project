@@ -47,8 +47,7 @@ class start extends Command {
 	}
 
 	/**
-   * @param {Message} message
-   * @param {Array} args
+   * @param {Discord.Message} message
    */
 
 	async run(message) {
@@ -56,8 +55,7 @@ class start extends Command {
 	}
 
 	/**
-   * @param {Message} message
-   * @param {Array} args
+   * @param {Discord.Message} message
    */
 
 	async yt(message) {
@@ -107,8 +105,7 @@ class start extends Command {
 	}
 
 	/**
-   * @param {Message} message
-   * @param {Array} args
+   * @param {Discord.Message} message
    */
 
 	async fishing(message) {
@@ -158,8 +155,7 @@ class start extends Command {
 	}
 
 	/**
-   * @param {Message} message
-   * @param {Array} args
+   * @param {Discord.Message} message
    */
 	async poker(message) {
 		const fetch = require('node-fetch');

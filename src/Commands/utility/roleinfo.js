@@ -42,7 +42,7 @@ class roleinfo extends Command {
 			.addField('**Members**', role.members.size.toString(), true)
 			.addField('**Position**', role.position.toString(), true)
 			.addField('**Mentionable**', status[role.mentionable].toString(), true)
-			.setFooter(message.member.displayName.toString(), message.author.displayAvatarURL(), true);
+			.setFooter(message.member.displayName.toString(), message.author.displayAvatarURL());
 		message.reply({ embeds: [roleembed] });
 	}
 
