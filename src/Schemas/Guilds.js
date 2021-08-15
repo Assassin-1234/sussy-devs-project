@@ -27,6 +27,51 @@ const Guilds = new Schema({
 			default: 0,
 		},
 	},
+	config: {
+		type: Object,
+		default: {
+			AntiLinks: false,
+			AntiRaid: false,
+			AntiCaps: false,
+			CapsThreshold: 0,
+			AutoQuarantine: false,
+		},
+	},
+	whitelists: {
+		type: Object,
+		default: {
+			AntiLinks: {
+				channels: [],
+				roles: [],
+			},
+			CapsThreshold: {
+				channels: [],
+				roles: [],
+			},
+		},
+	},
+	actions: {
+		type: Object,
+		default: {
+			AntiLinks: 'delete',
+			AntiRaid: 'kick',
+			CapsThresHold: 'kick',
+		},
+	},
+	roles: {
+		staffroles: {
+			type: String,
+			default: 'null',
+		},
+		muterole: {
+			type: String,
+			default: 'null',
+		},
+		quarantineRole: {
+			type: String,
+			default: 'null',
+		},
+	},
 });
 
 module.exports = model('Guilds', Guilds);

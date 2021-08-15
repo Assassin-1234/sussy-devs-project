@@ -1,5 +1,5 @@
 const InteractionBase = require('../../Structures/InteractionBase');
-const { Interaction, MessageEmbed } = require('discord.js');
+const { MessageEmbed } = require('discord.js');
 module.exports = class PingInteraction extends InteractionBase {
 	constructor(...args) {
 		super(...args, {
