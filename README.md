@@ -1,6 +1,14 @@
 # sussy-devs-project
-sus
 
-okay, that's a commit
+## this is out submission for TCOC.
 
-no its not 🤣
+<br>
+
+***introducing*** **sus bot!!**
+<br>
+
+# features
+- automod
+- moderation
+- image gen
+- utils

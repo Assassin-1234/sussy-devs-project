@@ -53,9 +53,8 @@ class Ping extends Command {
 		}
 		if(!data.config.AuthoQuarantine) {
 			data.config.AutoQuarantine = true;
-			data.save();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
-			console.log(data);
 			message.reply({
 				embeds: [
 					await this.client.utils.SuccessEmbed(message, 'auto quarantine was enabled successfully'),

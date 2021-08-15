@@ -66,7 +66,7 @@ class AntiLinks extends Command {
 		}
 		else {
 			data.config.AntiLinks = true;
-			data.save();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
 				await this.client.utils.SuccessEmbed(message, 'successfully enabled AntiLinks.'),
@@ -82,7 +82,7 @@ class AntiLinks extends Command {
 		}
 		else {
 			data.config.AntiLinks = false;
-			data.save();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
 				await this.client.utils.SuccessEmbed(message, 'successfully disabled Anti Links.'),
@@ -122,7 +122,7 @@ class AntiLinks extends Command {
 			}
 			if(channel) data.whitelists.AntiLinks.channels.push(channel.id);
 		}
-		data.save();
+		await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
 	async actions(message, args, prefix) {
