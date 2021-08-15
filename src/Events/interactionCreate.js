@@ -4,6 +4,7 @@ const Event = require('../Structures/EventBase');
 
 module.exports = class extends Event {
 	async run(interaction) {
+
 		if (interaction.isCommand()) {
 			await this.client.application?.commands
 				.fetch(interaction.commandId)
@@ -24,6 +25,14 @@ module.exports = class extends Event {
 				});
 				console.log(err);
 			}
+
+		}
+		if (interaction.isCommand()) {
+			this.client.interactions.handleSlash(interaction);
+		}
+
+		if (interaction.isSelectMenu() && interaction.customId === 'HELP_CATEGORIES') {
+			this.client.interactions.handleHelp(interaction);
 		}
 	}
 };
