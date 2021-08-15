@@ -137,6 +137,7 @@ class AntiLinks extends Command {
 		}
 		else {
 			data.actions.AntiLinks = args[1].toLowerCase();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({
 				embeds: [

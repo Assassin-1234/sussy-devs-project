@@ -294,7 +294,7 @@ module.exports = class Tools {
 			user.ban({ reason: reason });
 		}
 		if(action == 'mute') {
-			message.member.roles.cache.add(guildData.roles.muterole);
+			user.roles.cache.add(guildData.roles.muterole);
 		}
 		if(action == 'delete') {
 			message.delete();
