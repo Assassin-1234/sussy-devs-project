@@ -7,7 +7,7 @@ class serverinfo extends Command {
 		super(...args, {
 			aliases: ['si'],
 			description: 'avatar command',
-			category: 'Utility',
+			category: 'utility',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

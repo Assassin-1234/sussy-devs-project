@@ -5,7 +5,13 @@ const glob = promisify(require('glob'));
 const Command = require('./CommandBase.js');
 const Event = require('./EventBase.js');
 const Interaction = require('./InteractionBase');
-const { Collection, MessageEmbed, Message, MessageActionRow, MessageSelectMenu } = require('discord.js');
+const {
+	Collection,
+	MessageEmbed,
+	Message,
+	MessageActionRow,
+	MessageSelectMenu,
+} = require('discord.js');
 module.exports = class Tools {
 	constructor(client) {
 		this.client = client;
@@ -17,6 +23,9 @@ module.exports = class Tools {
 
 	sleep(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+	removeDupes(array) {
+		return [...new Set(array)];
 	}
 
 	isClass(input) {
@@ -34,6 +43,12 @@ module.exports = class Tools {
 
 	checkDevs(target) {
 		return this.client.developers.includes(target);
+	}
+	capitalise(string) {
+		return string
+			.split(' ')
+			.map((str) => str.slice(0, 1).toUpperCase() + str.slice(1))
+			.join(' ');
 	}
 
 	formatArray(array, type = 'conjunction') {
@@ -174,7 +189,6 @@ module.exports = class Tools {
    * @param {String} message - Error message
    */
 	async missingArgs(message, errorReply) {
-
 		return message.reply({
 			embeds: [
 				new MessageEmbed()
@@ -217,7 +231,9 @@ module.exports = class Tools {
 					delete require.cache[interactionFile];
 					const { name } = path.parse(interactionFile);
 					const File = require(interactionFile);
-					if (!this.isClass(File)) {throw new TypeError(`Interaction ${name} doesn't export a class.`);}
+					if (!this.isClass(File)) {
+						throw new TypeError(`Interaction ${name} doesn't export a class.`);
+					}
 					const interaction = new File(this.client, name.toLowerCase());
 					if (!(interaction instanceof Interaction)) {
 						throw new TypeError(
@@ -281,71 +297,97 @@ module.exports = class Tools {
 		// if(action == 'kick') {
 		// 	if(user.kickable) {user.kick({ reason: reason });}
 		// }
-		if(action == 'ban') {
-			if(user.bannable) {user.ban({ reason: reason });}
+		if (action == 'ban') {
+			if (user.bannable) {
+				user.ban({ reason: reason });
+			}
 		}
-		if(action == 'mute') {
+		if (action == 'mute') {
 			user.roles.cache.add(guildData.roles.muterole);
 		}
-		if(action == 'delete') {
+		if (action == 'delete') {
 			message.delete();
 		}
-
 	}
 	async handleHelp(interaction) {
-		const categorySelects = new MessageActionRow()
-			.addComponents(
-				new MessageSelectMenu()
-					.setCustomId('HELP_CATEGORIES')
-					.setPlaceholder('Select a category')
-					.setMinValues(0)
-					.setMaxValues(1)
-					.addOptions([
-						{
-							label: 'Activities',
-							description: 'activies commands',
-							value: 'activities',
-						},
-						{
-							label: 'Automod',
-							description: 'automod commands.',
-							value: 'automod',
-						},
-						{
-							label: 'Image',
-							description: 'image maker commands.',
-							value: 'image',
-						},
-						{
-							label: 'Utility',
-							description: 'utility commands',
-							value: 'Utility',
-						},
-						{
-							label: 'Settings',
-							description: 'Server settings and configuration.',
-							value: 'settings',
-						},
-						{
-							label: 'Moderation',
-							description: 'Server Moderation',
-							value: 'moderation',
-						},
-					]),
-			);
+		const categorySelects = new MessageActionRow().addComponents(
+			new MessageSelectMenu()
+				.setCustomId('HELP_CATEGORIES')
+				.setPlaceholder('Select a category')
+				.setMinValues(0)
+				.setMaxValues(1)
+				.addOptions([
+					{
+						label: 'Activities',
+						description: 'activies commands',
+						value: 'activities',
+					},
+					{
+						label: 'Automod',
+						description: 'automod commands.',
+						value: 'automod',
+					},
+					{
+						label: 'Image',
+						description: 'image maker commands.',
+						value: 'image',
+					},
+					{
+						label: 'Utility',
+						description: 'utility commands',
+						value: 'Utility',
+					},
+					{
+						label: 'Settings',
+						description: 'Server settings and configuration.',
+						value: 'settings',
+					},
+					{
+						label: 'Moderation',
+						description: 'Server Moderation',
+						value: 'moderation',
+					},
+				]),
+		);
 
 		if (interaction.message.author !== null) {
 			return interaction.reply({
 				ephemeral: true,
 				embeds: [
 					new MessageEmbed()
-						.setImage('https://images-ext-1.discordapp.net/external/k3HetTxdca_RGQ-oY7TIkVwwWTEFpKG7pFy3N02RlCk/https/i.imgur.com/tnbIcOg.png?width=599&height=8')
+						.setImage(
+							'https://images-ext-1.discordapp.net/external/k3HetTxdca_RGQ-oY7TIkVwwWTEFpKG7pFy3N02RlCk/https/i.imgur.com/tnbIcOg.png?width=599&height=8',
+						)
 						.setColor('WHITE')
-						.setTitle(`↷₊˚ʚ ${interaction.values.toString()} Commands (${this.client.commands.filter((c) => c.category === interaction.values.toString()).size})`)
-						.setDescription(this.client.commands.filter((c) => c.category === interaction.values.toString()).map((c) => ' ' + `\`${c.name}\``).toString().trim() || '-'),
-				], components: [categorySelects, {
-					type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/8279tv63yt' }],
-				}],
+						.setTitle(
+							`↷₊˚ʚ ${interaction.values.toString()} Commands (${
+								this.client.commands.filter(
+									(c) => c.category === interaction.values.toString(),
+								).size
+							})`,
+						)
+						.setDescription(
+							this.client.commands
+								.filter((c) => c.category === interaction.values.toString())
+								.map((c) => ' ' + `\`${c.name}\``)
+								.toString()
+								.trim() || '-',
+						),
+				],
+				components: [
+					categorySelects,
+					{
+						type: 1,
+						components: [
+							{
+								type: 2,
+								style: 5,
+								label: 'Support Server',
+								url: 'https://discord.gg/8279tv63yt',
+							},
+						],
+					},
+				],
 			});
 		}
 		else {
@@ -354,13 +396,39 @@ module.exports = class Tools {
 				ephemeral: true,
 				embeds: [
 					new MessageEmbed()
-						.setImage('https://images-ext-1.discordapp.net/external/k3HetTxdca_RGQ-oY7TIkVwwWTEFpKG7pFy3N02RlCk/https/i.imgur.com/tnbIcOg.png?width=599&height=8')
+						.setImage(
+							'https://images-ext-1.discordapp.net/external/k3HetTxdca_RGQ-oY7TIkVwwWTEFpKG7pFy3N02RlCk/https/i.imgur.com/tnbIcOg.png?width=599&height=8',
+						)
 						.setColor('WHITE')
-						.setTitle(`↷₊˚ʚ ${interaction.values.toString()} Commands (${this.client.commands.filter((c) => c.category === interaction.values.toString()).size})`)
-						.setDescription(this.client.commands.filter((c) => c.category === interaction.values.toString()).map((c) => ' ' + `\`${c.name}\``).toString().trim() || '-'),
-				], components: [categorySelects, {
-					type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/8279tv63yt' }],
-				}],
+						.setTitle(
+							`↷₊˚ʚ ${interaction.values.toString()} Commands (${
+								this.client.commands.filter(
+									(c) => c.category === interaction.values.toString(),
+								).size
+							})`,
+						)
+						.setDescription(
+							this.client.commands
+								.filter((c) => c.category === interaction.values.toString())
+								.map((c) => ' ' + `\`${c.name}\``)
+								.toString()
+								.trim() || '-',
+						),
+				],
+				components: [
+					categorySelects,
+					{
+						type: 1,
+						components: [
+							{
+								type: 2,
+								style: 5,
+								label: 'Support Server',
+								url: 'https://discord.gg/8279tv63yt',
+							},
+						],
+					},
+				],
 			});
 		}
 	}

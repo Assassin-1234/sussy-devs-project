@@ -7,7 +7,7 @@ class roleinfo extends Command {
 		super(...args, {
 			aliases: ['ri'],
 			description: 'roleinfo command',
-			category: 'Utility',
+			category: 'utility',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

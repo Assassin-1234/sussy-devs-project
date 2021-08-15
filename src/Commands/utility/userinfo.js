@@ -7,7 +7,7 @@ class userinfo extends Command {
 		super(...args, {
 			aliases: ['ui'],
 			description: 'userinfo command',
-			category: 'Utility',
+			category: 'utility',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

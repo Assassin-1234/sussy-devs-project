@@ -65,45 +65,24 @@ class Help extends Command {
 				return message.reply({ embeds: [helpEmbed] });
 			}
 		}
+		const categories = this.client.utils.removeDupes(
+			this.client.commands.map((cmd) => cmd.category));
+
+		const select = new MessageSelectMenu()
+			.setCustomId('HELP_CATEGORIES')
+			.setPlaceholder('Select a category')
+			.setMinValues(0)
+			.setMaxValues(1);
+		for (const category of categories) {
+			select.addOptions([
+				{ label: this.client.utils.capitalise(category), description: `${this.client.utils.capitalise(category)} commands`, value: category },
+			]);
+		}
+
+
 		const categorySelects = new MessageActionRow()
 			.addComponents(
-				new MessageSelectMenu()
-					.setCustomId('HELP_CATEGORIES')
-					.setPlaceholder('Select a category')
-					.setMinValues(0)
-					.setMaxValues(1)
-					.addOptions([
-						{
-							label: 'Activities',
-							description: 'activies commands',
-							value: 'activities',
-						},
-						{
-							label: 'Automod',
-							description: 'automod commands.',
-							value: 'automod',
-						},
-						{
-							label: 'Image',
-							description: 'image maker commands.',
-							value: 'image',
-						},
-						{
-							label: 'Utility',
-							description: 'utility commands',
-							value: 'Utility',
-						},
-						{
-							label: 'Settings',
-							description: 'Server settings and configuration.',
-							value: 'settings',
-						},
-						{
-							label: 'Moderation',
-							description: 'Server Moderation',
-							value: 'moderation',
-						},
-					]),
+				select,
 			);
 
 		return message.reply({ embeds: [
