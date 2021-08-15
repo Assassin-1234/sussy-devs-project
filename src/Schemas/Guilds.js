@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-
+const Config = require('../Structures/BotConfig');
 const Guilds = new Schema({
 	guildId: {
 		type: String,
@@ -11,7 +11,7 @@ const Guilds = new Schema({
 	},
 	prefix: {
 		type: String,
-		default: null,
+		default: Config.prefix,
 	},
 	blacklist: {
 		state: {
