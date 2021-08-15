@@ -53,6 +53,9 @@ I know that lots of you are thinking that we make a request to the database ever
 
 handler is from my other bot [deF](https://top.gg/bot/783306479721512960) so go check it out
 
+# To do
+[todo-list](https://trello.com/b/MKG8XWgG/sussy-devs-project) 
+
 ## credits
 
 @Assassin-1234
