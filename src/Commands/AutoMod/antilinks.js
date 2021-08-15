@@ -18,7 +18,7 @@ class AntiLinks extends Command {
 					aliases: ['on', 'yes', 'YAAAAAS'],
 					description: 'enable antilinks feature',
 					devsOnly: false,
-					disabled: true,
+					disabled: false,
 					cooldown: 1000,
 				},
 				{
@@ -59,9 +59,9 @@ class AntiLinks extends Command {
    */
 	async enable(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiLinks == false) {
+		if(data.config.AntiLinks) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Links module is already enabled. Disable it using `.antilinks disable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Links module is already enabled. Disable it using `.antilinks disable`'),
 			] });
 		}
 		else {
@@ -69,15 +69,15 @@ class AntiLinks extends Command {
 			data.save();
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
-				this.client.utils.successEmbed(message, 'successfully enabled AntiLinks.'),
+				await this.client.utils.SuccessEmbed(message, 'successfully enabled AntiLinks.'),
 			] });
 		}
 	}
 	async disable(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiLinks == false) {
+		if(!data.config.AntiLinks) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Links module is disabled. Enable it using `.antilinks enable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Links module is disabled. Enable it using `.antilinks enable`'),
 			] });
 		}
 		else {
@@ -85,15 +85,15 @@ class AntiLinks extends Command {
 			data.save();
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
-				this.client.utils.successEmbed(message, 'successfully disabled Anti Links.'),
+				await this.client.utils.SuccessEmbed(message, 'successfully disabled Anti Links.'),
 			] });
 		}
 	}
 	async whitelist(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiLinks == false) {
+		if(!data.config.AntiLinks) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Links module is disabled. Enable it using `.antilinks enable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Links module is disabled. Enable it using `.antilinks enable`'),
 			] });
 		}
 		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 1, 'please provide a type. i.e role / channel');
@@ -104,7 +104,7 @@ class AntiLinks extends Command {
 			if(!role) {
 				return message.reply({
 					embeds: [
-						this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+						await this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
 					],
 				});
 			}
@@ -116,7 +116,7 @@ class AntiLinks extends Command {
 			if(!channel) {
 				return message.reply({
 					embeds: [
-						this.client.utils.ErrorEmbed(message, 'channel ID is not valid'),
+						await this.client.utils.ErrorEmbed(message, 'channel ID is not valid'),
 					],
 				});
 			}
@@ -131,7 +131,7 @@ class AntiLinks extends Command {
 		if(!['ban', 'kick', 'mute', 'quarantine'].includes(args[1].toLowerCase())) {
 			return message.reply({
 				embeds: [
-					this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine'),
+					await this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine'),
 				],
 			});
 		}
@@ -140,7 +140,7 @@ class AntiLinks extends Command {
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({
 				embeds: [
-					this.client.utils.successEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
+					await this.client.utils.SuccessEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
 				],
 			});
 		}

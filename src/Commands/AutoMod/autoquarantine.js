@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Command = require('../../Structures/CommandBase');
 const { Permissions, Message, MessageEmbed } = require('discord.js');
+const schema = require('../../Schemas/Guilds');
 
 class Ping extends Command {
 	constructor(...args) {
@@ -22,7 +23,6 @@ class Ping extends Command {
 				},
 				{
 					name: 'disable',
-					aliases: ['e', 'ex'],
 					description: 'disable auto quarantine module',
 					devsOnly: false,
 					disabled: true,
@@ -43,21 +43,22 @@ class Ping extends Command {
 		});
 	}
 	async enable(message, args, prefix) {
-		const data = await data.findOne({ guildId: message.guild.id });
-		if(data.AutoQuarantine) {
+		const data = await schema.findOne({ guildId: message.guild.id });
+		if(data.config.AutoQuarantine) {
 			return message.reply({
 				embeds: [
-					this.client.utils.ErrorEmbed(message, 'auto quarantine is already enabled'),
+					await this.client.utils.ErrorEmbed(message, 'auto quarantine is already enabled'),
 				],
 			});
 		}
-		else {
-			data.AutoQuarantine = true;
+		if(!data.config.AuthoQuarantine) {
+			data.config.AutoQuarantine = true;
 			data.save();
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
-			return message.reply({
+			console.log(data);
+			message.reply({
 				embeds: [
-					this.client.utils.SuccessEmbed(message, 'auto quarantine was enabled successfully'),
+					await this.client.utils.SuccessEmbed(message, 'auto quarantine was enabled successfully'),
 				],
 			});
 		}

@@ -32,7 +32,6 @@ module.exports = class extends Event {
 				},
 			],
 		});
-		require('../../Dashboard/server.js');
 
 		await this.client.utils.sleep(2000);
 	}

@@ -132,7 +132,7 @@ class Set extends Command {
 						ADD_REACTIONS: false,
 					});
 				});
-				data.roles.quarantinerole = quarantinerole.id;
+				data.roles.quarantineRole = quarantinerole.id;
 				data.save();
 				message.reply({
 					embeds: [
@@ -159,8 +159,8 @@ class Set extends Command {
 				],
 			});
 		}
-		data.roles.quarantinerole = args[1];
-		data.roles.quarantinerole == 'null' ? message.reply({
+		data.roles.quarantineRole = args[1];
+		data.roles.quarantineRole == 'null' ? message.reply({
 			embeds: [
 				await this.client.utils.SuccessEmbed(message, `successfully set the quarantinerole to \`${role.name}\``),
 			],

@@ -77,7 +77,7 @@ class AntiCaps extends Command {
 		data.save();
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 		message.reply({ embeds: [
-			this.client.utils.successEmbed(message, `successfully set caps threshold to ${parseInt(args[1])}`),
+			await this.client.utils.SuccessEmbed(message, `successfully set caps threshold to ${parseInt(args[1])}`),
 		] });
 	}
 
@@ -89,7 +89,7 @@ class AntiCaps extends Command {
 		const data = await schema.findOne({ guildId: message.guild.id });
 		if(data.config.AntiCaps == true) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Caps module is already enabled. Disable it using `.anticaps disable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is already enabled. Disable it using `.anticaps disable`'),
 			] });
 		}
 		else {
@@ -98,7 +98,7 @@ class AntiCaps extends Command {
 			data.save();
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
-				this.client.utils.successEmbed(message, 'successfully enabled Anti Caps. Caps threshold set to default as `10`'),
+				await this.client.utils.SuccessEmbed(message, 'successfully enabled Anti Caps. Caps threshold set to default as `10`'),
 			] });
 		}
 	}
@@ -106,7 +106,7 @@ class AntiCaps extends Command {
 		const data = await schema.findOne({ guildId: message.guild.id });
 		if(data.config.AntiCaps == false) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
 		}
 		else {
@@ -115,7 +115,7 @@ class AntiCaps extends Command {
 			data.save();
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
-				this.client.utils.successEmbed(message, 'successfully disabled Anti Caps. Caps threshold set to `0`'),
+				await this.client.utils.SuccessEmbed(message, 'successfully disabled Anti Caps. Caps threshold set to `0`'),
 			] });
 		}
 	}
@@ -123,7 +123,7 @@ class AntiCaps extends Command {
 		const data = await schema.findOne({ guildId: message.guild.id });
 		if(data.config.AntiCaps == false) {
 			return message.reply({ embeds: [
-				this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
+				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
 		}
 		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 1, 'please provide a type. i.e role / channel');
@@ -134,7 +134,7 @@ class AntiCaps extends Command {
 			if(!role) {
 				return message.reply({
 					embeds: [
-						this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
+						await this.client.utils.ErrorEmbed(message, 'role ID is not valid'),
 					],
 				});
 			}
@@ -146,7 +146,7 @@ class AntiCaps extends Command {
 			if(!channel) {
 				return message.reply({
 					embeds: [
-						this.client.utils.ErrorEmbed(message, 'channel ID is not valid'),
+						await this.client.utils.ErrorEmbed(message, 'channel ID is not valid'),
 					],
 				});
 			}
@@ -161,7 +161,7 @@ class AntiCaps extends Command {
 		if(!['ban', 'kick', 'mute', 'quarantine', 'delete'].includes(args[1].toLowerCase())) {
 			return message.reply({
 				embeds: [
-					this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine/delete'),
+					await this.client.utils.ErrorEmbed(message, 'please provide a value action. i.e ban/kick/mute/quarantine/delete'),
 				],
 			});
 		}
@@ -170,7 +170,7 @@ class AntiCaps extends Command {
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({
 				embeds: [
-					this.client.utils.successEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
+					await this.client.utils.SuccessEmbed(message, `successfully changed the action to ${args[1].toLowerCase()}`),
 				],
 			});
 		}
