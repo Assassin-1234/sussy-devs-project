@@ -5,7 +5,7 @@ const { Permissions, Message, MessageEmbed } = require('discord.js');
 class avatar extends Command {
 	constructor(...args) {
 		super(...args, {
-			aliases: ['avatar'],
+			aliases: ['av', 'pfp'],
 			description: 'avatar command',
 			category: 'utility',
 			devsOnly: false,
