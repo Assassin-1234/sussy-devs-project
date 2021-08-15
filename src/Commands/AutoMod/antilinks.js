@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 const Command = require('../../Structures/CommandBase');
 const { Permissions, Message, MessageEmbed } = require('discord.js');
-const { schema } = require('../../Schemas/Guilds');
+const schema = require('../../Schemas/Guilds');
 
 class AntiLinks extends Command {
 	constructor(...args) {

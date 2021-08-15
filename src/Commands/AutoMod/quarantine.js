@@ -14,9 +14,8 @@ class Ping extends Command {
 			subCommands: [
 				{
 					name: 'enable',
-					aliases: ['m', 'mo'],
-					description: 'Check bot latency',
-					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
+					description: 'enable auto quarantine module',
+					clientPerms: [Permissions.FLAGS.MANAGE_ROLES],
 					devsOnly: false,
 					disabled: false,
 					cooldown: 3000,
@@ -24,14 +23,44 @@ class Ping extends Command {
 				{
 					name: 'disable',
 					aliases: ['e', 'ex'],
-					description: 'Something Extra',
-					usage: ['[message]'],
+					description: 'disable auto quarantine module',
 					devsOnly: false,
 					disabled: true,
 					cooldown: 1000,
 				},
 			],
 		});
+	}
+	async run(message, args, prefix) {
+		return message.reply({
+			embeds: [
+				new MessageEmbed()
+					.setTitle('Auto quarantine')
+					.setDescription('Auto quarantine assigns a certain role to someone when they are acting sus, you can manually assign the role to someone by using the `.quarantine @member @member @member... command`')
+					.setAuthor(message.author.username, message.author.avatarURL({ dynamic : true }))
+					.setColor('RANDOM'),
+			],
+		});
+	}
+	async enable(message, args, prefix) {
+		const data = await data.findOne({ guildId: message.guild.id });
+		if(data.AutoQuarantine) {
+			return message.reply({
+				embeds: [
+					this.client.utils.ErrorEmbed(message, 'auto quarantine is already enabled'),
+				],
+			});
+		}
+		else {
+			data.AutoQuarantine = true;
+			data.save();
+			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
+			return message.reply({
+				embeds: [
+					this.client.utils.SuccessEmbed(message, 'auto quarantine was enabled successfully'),
+				],
+			});
+		}
 	}
 }
 
