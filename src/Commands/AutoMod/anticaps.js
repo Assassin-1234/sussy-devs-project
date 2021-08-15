@@ -7,7 +7,7 @@ class AntiCaps extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'interact with the anticaps module to keep your server safer!',
-			category: 'AutoMod',
+			category: 'automod',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

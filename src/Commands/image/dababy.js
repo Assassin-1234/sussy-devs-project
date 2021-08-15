@@ -6,7 +6,7 @@ module.exports = class dababy extends Command {
 		super(...args, {
 			aliases: ['db'],
 			description: 'Less go',
-			category: 'Image',
+			category: 'image',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

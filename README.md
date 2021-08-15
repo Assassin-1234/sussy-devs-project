@@ -16,7 +16,6 @@
 - moderation
 - - kick
 - - ban
-- - mute
 - - quarantine
 - image gen
 - utils

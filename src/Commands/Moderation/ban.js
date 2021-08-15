@@ -6,7 +6,7 @@ class Ban extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'ban a user!!',
-			category: 'Moderation',
+			category: 'moderation',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

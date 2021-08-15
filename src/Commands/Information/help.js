@@ -7,7 +7,7 @@ class Help extends Command {
 		super(...args, {
 			aliases: ['h'],
 			description: 'View command or subcommand help',
-			category: 'Information',
+			category: 'information',
 			usage: ['[command]', '[command subcommand]'],
 			devsOnly: false,
 			disabled: false,

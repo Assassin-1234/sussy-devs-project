@@ -6,7 +6,7 @@ class Kick extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'kick a user!!',
-			category: 'Moderation',
+			category: 'moderation',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

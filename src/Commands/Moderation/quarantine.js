@@ -8,7 +8,7 @@ class Quarantine extends Command {
 		super(...args, {
 			aliases: ['pong'],
 			description: 'pong!!',
-			category: 'Information',
+			category: 'moderation',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

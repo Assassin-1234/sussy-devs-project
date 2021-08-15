@@ -7,7 +7,7 @@ class Ping extends Command {
 		super(...args, {
 			aliases: ['pong'],
 			description: 'pong!!',
-			category: 'Information',
+			category: 'information',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

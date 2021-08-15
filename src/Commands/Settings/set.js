@@ -7,7 +7,7 @@ class Set extends Command {
 		super(...args, {
 			aliases: ['config', 'conf', 'settings'],
 			description: 'set the guild configurations with this command',
-			category: 'Settings',
+			category: 'settings',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

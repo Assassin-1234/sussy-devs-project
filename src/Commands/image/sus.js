@@ -7,7 +7,7 @@ class sus extends Command {
 		super(...args, {
 			aliases: ['sussybaka', 'sussy'],
 			description: 'Kinda sus',
-			category: 'Image',
+			category: 'image',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
