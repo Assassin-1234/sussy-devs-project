@@ -11,6 +11,7 @@ class AntiCaps extends Command {
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
+			userPerms: [Permissions.FLAGS.MANAGE_GUILD],
 			subCommands: [
 				{
 					name: 'threshold',
