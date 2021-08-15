@@ -37,17 +37,18 @@ module.exports = class deFDatabase {
 		const guild = await Guild.findOne({ guildId: guildId }).cache(60, `GUILD_${guildId}`);
 		if (!guild) {
 			const newGuild = new Guild({ guildId: guildId });
-			const { prefix, registeredAt, blacklist } = newGuild;
+			const { prefix, registeredAt, blacklist, config } = newGuild;
 			await newGuild.save().catch((error) => console.log('Error!', error));
 
-			return { prefix, registeredAt, blacklist };
+			return { prefix, registeredAt, blacklist, config };
 		}
 		else {
 			const prefix = guild.prefix;
 			const registeredAt = guild.registeredAt;
 			const blacklist = guild.blacklist;
+			const config = guild.config;
 
-			return { prefix, registeredAt, blacklist };
+			return { prefix, registeredAt, blacklist, config };
 		}
 	}
 };
