@@ -20,10 +20,13 @@ class Quarantine extends Command {
    * @param {Array} args
    */
 
-	async run(message, args, prefix) {
+	async run(message, args) {
 		if(!args.length) message.reply({ content: 'please provide user mentions to quarantine' });
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.roles.quarantineRole === 'null' || !data.config.AutoQuarantine) return message.reply({ content: 'quarantine module is not enabled in this server or the role is not setup.' });
+		if(data.roles.quarantineRole === 'null' || !data.config.AutoQuarantine) {
+			message.reply({ content: 'quarantine module is not enabled in this server or the role is not setup.' });
+			return;
+		}
 		message.mentions.members.forEach(m => {
 			setTimeout(() => {
 				const botRolePossition = message.guild.me.roles.highest.position;

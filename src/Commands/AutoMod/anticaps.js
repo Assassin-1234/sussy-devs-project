@@ -62,7 +62,6 @@ class AntiCaps extends Command {
 
 	/**
    * @param {Message} message
-   * @param {Array} args
    */
 
 	async run(message) {

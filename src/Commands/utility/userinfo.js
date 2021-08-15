@@ -65,8 +65,8 @@ class userinfo extends Command {
 			permissions.push('Manage Webhooks');
 		}
 
-		if(member.permissions.has('MANAGE_EMOJIS')) {
-			permissions.push('Manage Emojis');
+		if(member.permissions.has('MANAGE_EMOJIS_AND_STICKERS')) {
+			permissions.push('Manage Emojis and stickers');
 		}
 
 		if(permissions.length == 0) {
