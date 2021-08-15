@@ -25,7 +25,7 @@ class AntiCaps extends Command {
 					aliases: ['on', 'yes', 'YAAAAAS'],
 					description: 'enable anticaps feature',
 					devsOnly: false,
-					disabled: true,
+					disabled: false,
 					cooldown: 1000,
 				},
 				{
