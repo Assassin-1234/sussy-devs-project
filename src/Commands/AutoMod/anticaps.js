@@ -73,7 +73,7 @@ class AntiCaps extends Command {
 		const data = await schema.findOne({ guildId: message.guild.id });
 		data.config.CapsThreshold += parseInt(args[1]);
 		data.config.AntiCaps = true;
-		data.save();
+		await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 		message.reply({ embeds: [
 			await this.client.utils.SuccessEmbed(message, `successfully set caps threshold to ${parseInt(args[1])}`),
@@ -86,7 +86,7 @@ class AntiCaps extends Command {
    */
 	async enable(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiCaps == true) {
+		if(data.config.AntiCaps) {
 			return message.reply({ embeds: [
 				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is already enabled. Disable it using `.anticaps disable`'),
 			] });
@@ -94,7 +94,7 @@ class AntiCaps extends Command {
 		else {
 			data.config.CapsThreshold = 10;
 			data.config.AntiCaps = true;
-			data.save();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
 				await this.client.utils.SuccessEmbed(message, 'successfully enabled Anti Caps. Caps threshold set to default as `10`'),
@@ -103,7 +103,7 @@ class AntiCaps extends Command {
 	}
 	async disable(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiCaps == false) {
+		if(!data.config.AntiCaps) {
 			return message.reply({ embeds: [
 				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
@@ -111,7 +111,7 @@ class AntiCaps extends Command {
 		else {
 			data.config.CapsThreshold = 0;
 			data.config.AntiCaps = false;
-			data.save();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({ embeds: [
 				await this.client.utils.SuccessEmbed(message, 'successfully disabled Anti Caps. Caps threshold set to `0`'),
@@ -120,7 +120,7 @@ class AntiCaps extends Command {
 	}
 	async whitelist(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.config.AntiCaps == false) {
+		if(!data.config.AntiCaps) {
 			return message.reply({ embeds: [
 				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
@@ -151,7 +151,7 @@ class AntiCaps extends Command {
 			}
 			if(channel) data.whitelists.CapsThreshold.channels.push(channel.id);
 		}
-		data.save();
+		await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 		this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 	}
 	async actions(message, args, prefix) {
@@ -166,6 +166,7 @@ class AntiCaps extends Command {
 		}
 		else {
 			data.actions.AntiCaps = args[1].toLowerCase();
+			await schema.findOneAndUpdate({ guildId: message.guild.id }, data, { upset: true });
 			this.client.db.cache.clear(`GUILD_${message.guild.id}`);
 			message.reply({
 				embeds: [

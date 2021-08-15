@@ -30,21 +30,12 @@ class Quarantine extends Command {
 		message.mentions.members.forEach(m => {
 			setTimeout(() => {
 				const botRolePossition = message.guild.me.roles.highest.position;
-				const rolePosition = message.guild.members.cache.get(m.id).roles.highest.position;
+				const rolePosition = m.roles.highest.position;
 				const userRolePossition = message.member.roles.highest.position;
 				const quarantineRolePosition = message.guild.roles.cache.get(data.roles.quarantineRole).position;
-				if (userRolePossition <= rolePosition) {
-					message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to you.' });
-					return;
-				}
-				if (botRolePossition <= rolePosition) {
-					message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to me.' });
-					return;
-				}
-				if(quarantineRolePosition <= botRolePossition) {
-					message.reply({ content: 'quarantine role is higher than my highest role. Cannot assign the role' });
-					return;
-				}
+				if (userRolePossition <= rolePosition) return message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to you.' });
+				if (botRolePossition <= rolePosition) return message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to me.' });
+				if(botRolePossition <= quarantineRolePosition) return message.reply({ content: 'quarantine role is higher than my highest role. Cannot assign the role' });
 
 				m.roles.add(data.roles.quarantineRole);
 				message.reply(`successfully quarantined ${m.user.tag}`);
