@@ -41,7 +41,14 @@ module.exports = class Tools {
 			array,
 		);
 	}
-
+	formatPerms(perm) {
+		return perm
+			.toLowerCase()
+			.replace(/(^|"|_)(\S)/g, (s) => s.toUpperCase())
+			.replace(/_/g, ' ')
+			.replace(/Guild/g, 'Server')
+			.replace(/Use Vad/g, 'Use Voice Acitvity');
+	}
 	timer(timestamp) {
 		const timeLeft = timestamp - Date.now();
 		const days = Math.floor(timeLeft / 86400000);
@@ -76,7 +83,7 @@ module.exports = class Tools {
 			if (missing.length) {
 				message.reply({
 					content: `You don't have \`${this.formatArray(
-						missing.map(this.client.tools.formatPerms),
+						missing.map(this.client.utils.formatPerms),
 					)}\` permission to run \`${command.name}\` command!`,
 				});
 				return false;
@@ -92,7 +99,7 @@ module.exports = class Tools {
 			if (missing.length) {
 				message.reply({
 					content: `I don't have \`${this.formatArray(
-						missing.map(this.client.tools.formatPerms),
+						missing.map(this.client.utils.formatPerms),
 					)}\` permission to run \`${command.name}\` command!`,
 				});
 				return false;
@@ -166,22 +173,7 @@ module.exports = class Tools {
    * @param {Number} missingIndex - Missing argument index
    * @param {String} message - Error message
    */
-	async missingArgs(message, prefix, command, missingIndex, errorReply) {
-		const mapped = command.usage.map((arg) => arg).join(' ');
-
-		const arrows = command.usage
-			.map((x, i) =>
-				missingIndex !== i
-					? ' '.repeat(x.length)
-					: ' ' + '^'.repeat(x.length - 2) + ' ',
-			)
-			.join('');
-		const subExtra = command.parent ? command.parent.length + 1 : 0;
-		const codeBlock =
-      '```xml\n' +
-      `${prefix}${command.parent ? command.parent + ' ' : ''}${command.name} ${mapped}\n${' '.repeat(subExtra + prefix.length + command.name.length + missingIndex,
-      )} ${arrows}\n${errorReply}` +
-      '```';
+	async missingArgs(message, errorReply) {
 
 		return message.reply({
 			embeds: [
@@ -191,8 +183,7 @@ module.exports = class Tools {
 						message.author.avatarURL({ dynamic: true }),
 					)
 					.setColor('RED')
-					.setDescription(codeBlock)
-					.addField('Example', `\`${prefix}${command.example}\``, false),
+					.setDescription(errorReply),
 			],
 		});
 	}
@@ -287,11 +278,11 @@ module.exports = class Tools {
 		return embed;
 	}
 	async doAction(message, action, user, reason, guildData) {
-		if(action == 'kick') {
-			user.kick({ reason: reason });
-		}
+		// if(action == 'kick') {
+		// 	if(user.kickable) {user.kick({ reason: reason });}
+		// }
 		if(action == 'ban') {
-			user.ban({ reason: reason });
+			if(user.bannable) {user.ban({ reason: reason });}
 		}
 		if(action == 'mute') {
 			user.roles.cache.add(guildData.roles.muterole);

@@ -37,7 +37,7 @@ class Ping extends Command {
 			embeds: [
 				new MessageEmbed()
 					.setTitle('Auto quarantine')
-					.setDescription('Auto quarantine assigns a certain role to someone when they are acting sus, you can manually assign the role to someone by using the `.quarantine @member @member @member... command`')
+					.setDescription('Auto quarantine assigns a certain role to someone when they are acting sus like if a new user joins, you can manually assign the role to someone by using the `.quarantine @member @member @member... command` \n use `.autoquarantine` command to view the subcommands')
 					.setAuthor(message.author.username, message.author.avatarURL({ dynamic : true }))
 					.setColor('RANDOM'),
 			],

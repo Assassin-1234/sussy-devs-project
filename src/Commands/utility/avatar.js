@@ -7,7 +7,7 @@ class avatar extends Command {
 		super(...args, {
 			aliases: ['av', 'pfp'],
 			description: 'avatar command',
-			category: 'utility',
+			category: 'Utility',
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

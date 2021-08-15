@@ -50,7 +50,11 @@ class AntiLinks extends Command {
    */
 
 	async run(message) {
-		message.channel.send('please select a subcommand');
+		message.channel.send({
+			embeds: [
+				new MessageEmbed().setTitle('Anti links').setDescription('Anti links detects any links posted in any channels and performs the action selected. \n \n use `.help antilinks` to view the subcommands').setAuthor(message.author.username, message.author.avatarURL({ dynamic: true })).setColor('RANDOM'),
+			],
+		});
 	}
 
 	/**
@@ -96,10 +100,10 @@ class AntiLinks extends Command {
 				await this.client.utils.ErrorEmbed(message, 'Anti Links module is disabled. Enable it using `.antilinks enable`'),
 			] });
 		}
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 1, 'please provide a type. i.e role / channel');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide a type. i.e role / channel');
 
 		if(args[1].toLowerCase() === 'role') {
-			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			if(!args[2]) return this.client.utils.missingArgs(message, 'please provide role / channel ID');
 			const role = message.guild.roles.cache.get(args[2]);
 			if(!role) {
 				return message.reply({
@@ -111,7 +115,7 @@ class AntiLinks extends Command {
 			if(role) data.whitelists.AntiLinks.roles.push(role.id);
 		}
 		if(args[1].toLowerCase() === 'channel') {
-			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			if(!args[2]) return this.client.utils.missingArgs(message, 'please provide role / channel ID');
 			const channel = message.guild.channels.cache.get(args[2]);
 			if(!channel) {
 				return message.reply({
@@ -127,7 +131,7 @@ class AntiLinks extends Command {
 	}
 	async actions(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'actions'), 1, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
 		if(!['ban', 'kick', 'mute', 'quarantine'].includes(args[1].toLowerCase())) {
 			return message.reply({
 				embeds: [

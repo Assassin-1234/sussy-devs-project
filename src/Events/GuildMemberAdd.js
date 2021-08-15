@@ -8,8 +8,8 @@ module.exports = class extends Event {
 				await member.roles.cache.add(guildData.roles.quarantineRole);
 			}
 		}
-		if(guildData.config.AntiRaid) {
-			this.client.utils.doAction('a', guildData.actions.AntiRaid, member, 'anti raid enabled', guildData);
-		}
+		// if(guildData.config.AntiRaid) {
+		// 	this.client.utils.doAction('a', guildData.actions.AntiRaid, member, 'anti raid enabled', guildData);
+		// }
 	}
 };

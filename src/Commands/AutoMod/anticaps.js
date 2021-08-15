@@ -8,6 +8,7 @@ class AntiCaps extends Command {
 		super(...args, {
 			description: 'interact with the anticaps module to keep your server safer!',
 			category: 'automod',
+			usage: ['<number>'],
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,
@@ -15,6 +16,7 @@ class AntiCaps extends Command {
 			subCommands: [
 				{
 					name: 'threshold',
+					usage: ['<number>'],
 					description: 'set the anticaps threshold',
 					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
 					devsOnly: false,
@@ -40,7 +42,7 @@ class AntiCaps extends Command {
 				{
 					name: 'whitelist',
 					parent: 'anticaps',
-					usage: ['<type> <ID>'],
+					usage: ['<type>', '<ID>'],
 					description: 'whitelist a role / channel from anticaps module',
 					clientPerms: [Permissions.FLAGS.EMBED_LINKS, Permissions.FLAGS.ADD_REACTIONS],
 					devsOnly: false,
@@ -66,10 +68,14 @@ class AntiCaps extends Command {
    */
 
 	async run(message) {
-		message.channel.send('please select a subcommand');
+		message.channel.send({
+			embeds: [
+				new MessageEmbed().setTitle('Anti Caps').setDescription('Anti Caps detects the number of uppercase letters in a message, if it exceeds the threshold then it performs the action specified. \n \n use `.help anticaps` to view the subcommands').setAuthor(message.author.username, message.author.avatarURL({ dynamic: true })).setColor('RANDOM'),
+			],
+		});
 	}
 	async threshold(message, args, prefix) {
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'threshold'), 1, 'please provide a threshold number');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide a threshold number');
 		if(isNaN(parseInt(args[1]))) return message.channel.send('threshold must be a number');
 		const data = await schema.findOne({ guildId: message.guild.id });
 		data.config.CapsThreshold += parseInt(args[1]);
@@ -126,10 +132,10 @@ class AntiCaps extends Command {
 				await this.client.utils.ErrorEmbed(message, 'Anti Caps module is disabled. Enable it using `.anticaps enable`'),
 			] });
 		}
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 1, 'please provide a type. i.e role / channel');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide a type. i.e role / channel');
 
 		if(args[1].toLowerCase() === 'role') {
-			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			if(!args[2]) return this.client.utils.missingArgs(message, 'please provide role / channel ID');
 			const role = message.guild.roles.cache.get(args[2]);
 			if(!role) {
 				return message.reply({
@@ -141,7 +147,7 @@ class AntiCaps extends Command {
 			if(role) data.whitelists.CapsThreshold.roles.push(role.id);
 		}
 		if(args[1].toLowerCase() === 'channel') {
-			if(!args[2]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'whitelist'), 2, 'please provide role / channel ID');
+			if(!args[2]) return this.client.utils.missingArgs(message, 'please provide role / channel ID');
 			const channel = message.guild.channels.cache.get(args[2]);
 			if(!channel) {
 				return message.reply({
@@ -157,7 +163,7 @@ class AntiCaps extends Command {
 	}
 	async actions(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'actions'), 1, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
 		if(!['ban', 'kick', 'mute', 'quarantine', 'delete'].includes(args[1].toLowerCase())) {
 			return message.reply({
 				embeds: [

@@ -49,7 +49,11 @@ class AntiRaid extends Command {
    */
 
 	async run(message) {
-		message.channel.send('please select a subcommand');
+		message.channel.send({
+			embeds: [
+				new MessageEmbed().setTitle('Anti Raid').setDescription('Anti Raid detects performs the action when a user joins a server. \n \n use `.help antiraid` to view the subcommands').setAuthor(message.author.username, message.author.avatarURL({ dynamic: true })).setColor('RANDOM'),
+			],
+		});
 	}
 
 	/**
@@ -90,7 +94,7 @@ class AntiRaid extends Command {
 	}
 	async actions(message, args, prefix) {
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(!args[1]) return this.client.utils.missingArgs(this.subCommands.find(x => x.name === 'actions'), 1, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
+		if(!args[1]) return this.client.utils.missingArgs(message, 'please provide an action. i.e ban/kick/mute/quarantine/delete');
 		if(!['ban', 'kick', 'mute', 'quarantine'].includes(args[1].toLowerCase())) {
 			return message.reply({
 				embeds: [

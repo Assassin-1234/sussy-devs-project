@@ -9,6 +9,7 @@ class Quarantine extends Command {
 			aliases: ['pong'],
 			description: 'pong!!',
 			category: 'moderation',
+			userPerms: [Permissions.FLAGS.MANAGE_ROLES],
 			devsOnly: false,
 			disabled: false,
 			cooldown: 2000,

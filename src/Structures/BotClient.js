@@ -9,14 +9,6 @@ module.exports = class BotClient extends Client {
 			intents: options.intents,
 			allowedMentions: { parse: ['users', 'roles'], repliedUser: false },
 			shards: 'auto',
-			failIfNotExists: false,
-			messageCacheLifetime: 60,
-			messageSweepInterval: 1500,
-			makeCache: Options.cacheWithLimits({
-				MessageManager: 2,
-				PresenceManager: 0,
-				UserManager: 0,
-			}),
 		});
 
 		this.validate(options);
