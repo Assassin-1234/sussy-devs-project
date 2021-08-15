@@ -17,11 +17,10 @@ class avatar extends Command {
 
 	/**
    * @param {Message} message
-   * @param {Array} args
    */
 
 	async run(message) {
-		const user = message.author || message.member.mentions.first();
+		const user = message.author || message.mentions.users.first();
 		const png = user.displayAvatarURL({ dynamic: false, format: 'png' });
 		const jpg = user.displayAvatarURL({ dynamic: false, format: 'jpg' });
 		const gif = user.displayAvatarURL({ dynamic: true });

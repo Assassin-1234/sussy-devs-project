@@ -20,21 +20,33 @@ class Quarantine extends Command {
    * @param {Array} args
    */
 
-	async run(message, args, prefix) {
+	async run(message, args) {
 		if(!args.length) message.reply({ content: 'please provide user mentions to quarantine' });
 		const data = await schema.findOne({ guildId: message.guild.id });
-		if(data.roles.quarantineRole === 'null' || !data.config.AutoQuarantine) return message.reply({ content: 'quarantine module is not enabled in this server or the role is not setup.' });
+		if(data.roles.quarantineRole === 'null' || !data.config.AutoQuarantine) {
+			message.reply({ content: 'quarantine module is not enabled in this server or the role is not setup.' });
+			return;
+		}
 		message.mentions.members.forEach(m => {
 			setTimeout(() => {
 				const botRolePossition = message.guild.me.roles.highest.position;
-				const rolePosition = message.guild.members.cache.get(m.id);
+				const rolePosition = message.guild.members.cache.get(m.id).roles.highest.position;
 				const userRolePossition = message.member.roles.highest.position;
 				const quarantineRolePosition = message.guild.roles.cache.get(data.roles.quarantineRole).position;
-				if (userRolePossition <= rolePosition) return message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to you.' });
-				if (botRolePossition <= rolePosition) return message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to me.' });
-				if(quarantineRolePosition <= botRolePossition) return message.reply({ content: 'quarantine role is higher than my highest role. Cannot assign the role' });
+				if (userRolePossition <= rolePosition) {
+					message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to you.' });
+					return;
+				}
+				if (botRolePossition <= rolePosition) {
+					message.reply({ content: 'Cannot quarantine that member because they have roles that is higher or equal to me.' });
+					return;
+				}
+				if(quarantineRolePosition <= botRolePossition) {
+					message.reply({ content: 'quarantine role is higher than my highest role. Cannot assign the role' });
+					return;
+				}
 
-				m.roles.cache.add(data.roles.quarantineRole);
+				m.roles.add(data.roles.quarantineRole);
 				message.reply(`successfully quarantined ${m.user.tag}`);
 			}, 1000);
 		});

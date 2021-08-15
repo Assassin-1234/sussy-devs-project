@@ -14,7 +14,7 @@ module.exports = class dababy extends Command {
 	}
 
 	/**
-   * @param {Message} message
+   * @param {Discord.Message} message
    * @param {string[]} args
    */
 

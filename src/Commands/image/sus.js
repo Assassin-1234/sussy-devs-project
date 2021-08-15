@@ -1,5 +1,5 @@
 const Command = require('../../Structures/CommandBase');
-const { MessageAttachment } = require('discord.js');
+const { MessageAttachment, Message } = require('discord.js');
 const Canvas = require('canvas');
 class sus extends Command {
 	constructor(...args) {

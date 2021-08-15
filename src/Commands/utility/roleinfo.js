@@ -22,7 +22,10 @@ class roleinfo extends Command {
 
 	async run(message, args) {
 		const role = message.mentions.roles.first() || message.guild.roles.cache.get(args[0]);
-		if (!role) return message.reply({ content: '**Please Enter A Valid Role!**' });
+		if (!role) {
+			message.reply({ content: '**Please Enter A Valid Role!**' });
+			return;
+		}
 
 		const status = {
 			false: 'No',

@@ -36,7 +36,6 @@ class Ping extends Command {
 
 	/**
    * @param {Message} message
-   * @param {Array} args
    */
 
 	async run(message) {
@@ -45,7 +44,6 @@ class Ping extends Command {
 
 	/**
    * @param {Message} message
-   * @param {Array} args
    */
 
 	async more(message) {
