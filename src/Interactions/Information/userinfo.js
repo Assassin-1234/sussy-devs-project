@@ -1,5 +1,5 @@
 const InteractionBase = require('../../Structures/InteractionBase');
-const { MessageEmbed } = require('discord.js');
+const { MessageEmbed, CommandInteraction } = require('discord.js');
 module.exports = class userinfo extends InteractionBase {
 	constructor(...args) {
 		super(...args, {
@@ -16,7 +16,7 @@ module.exports = class userinfo extends InteractionBase {
 		});
 	}
 	/**
-   * @param {Interaction} interaction
+   * @param {CommandInteraction} interaction
    */
 	async run(interaction, args) {
 

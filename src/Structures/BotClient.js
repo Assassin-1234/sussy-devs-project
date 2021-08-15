@@ -31,7 +31,7 @@ module.exports = class BotClient extends Client {
 		this.slashCooldowns = new Collection();
 
 		this.utils = new Utils(this);
-		/* this.db = new BotDatabase(this); */
+		this.db = new BotDatabase();
 	}
 
 	validate(options) {
@@ -65,7 +65,7 @@ module.exports = class BotClient extends Client {
 	}
 
 	async connect(token = this.token) {
-		/* this.db.loadDatabase(); */
+		this.db.loadDatabase();
 		this.utils.loadEvents();
 		this.utils.loadCommands();
 		await super.login(token);

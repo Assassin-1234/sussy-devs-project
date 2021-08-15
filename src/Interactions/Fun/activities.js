@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 const InteractionBase = require('../../Structures/InteractionBase');
-const { Interaction } = require('discord.js');
+const { Interaction, CommandInteraction } = require('discord.js');
 const ids = {
 	youtube: '755600276941176913',
 	poker: '755827207812677713',
@@ -71,7 +71,7 @@ module.exports = class PingInteraction extends InteractionBase {
 		});
 	}
 	/**
-   * @param {Interaction} interaction
+   * @param {CommandInteraction} interaction
    * @param {string[]} args
    */
 	async run(interaction, args) {
