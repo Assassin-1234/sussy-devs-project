@@ -23,7 +23,6 @@ module.exports = class extends Event {
 		const msgArray = message.content.split(' ');
 
 		if(guildData.config.AntiLinks) {
-			console.log(guildData);
 			if(guildData.whitelists.AntiLinks.channels.includes(message.channel.id) || guildData.whitelists.AntiLinks.roles.forEach(e => message.member.roles.cache.has(e))) return;
 			const regex = new RegExp('^(https?:\\/\\/)?' +
 			'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
@@ -33,7 +32,6 @@ module.exports = class extends Event {
 			'(\\#[-a-z\\d_]*)?$', 'i');
 			msgArray.forEach(async msg => {
 				if(regex.test(msg)) {
-					console.log(regex.test(msg));
 					const action = guildData.actions.AntiLinks;
 					await this.client.utils.doAction(message, action, message.member, 'posting links', guildData);
 				}

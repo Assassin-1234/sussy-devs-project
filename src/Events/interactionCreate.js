@@ -32,7 +32,7 @@ module.exports = class extends Event {
 		}
 
 		if (interaction.isSelectMenu() && interaction.customId === 'HELP_CATEGORIES') {
-			this.client.interactions.handleHelp(interaction);
+			this.client.utils.handleHelp(interaction);
 		}
 	}
 };
