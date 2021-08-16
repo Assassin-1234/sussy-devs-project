@@ -8,7 +8,7 @@ module.exports = class extends Event {
 
 		if (!message.guild || message.author.bot) return;
 
-		const guildData = await schema.findOne({ guildId: message.guild.id });
+		const guildData = await this.client.db.findOrCreateGuild(message.guild.id);
 
 		if (guildData.blacklist.state === true) return;
 
@@ -62,8 +62,8 @@ module.exports = class extends Event {
 			.split(/ +/g);
 
 		const command =
-      this.client.commands.get(cmd.toLowerCase()) ||
-      this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
+		this.client.commands.get(cmd.toLowerCase()) ||
+		this.client.commands.get(this.client.aliases.get(cmd.toLowerCase()));
 		if (command) {
 			if (command.disabled) {
 				message.reply({
