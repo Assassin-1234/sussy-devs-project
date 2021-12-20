@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 const path = require('path');
 const { promisify } = require('util');
@@ -294,9 +295,10 @@ module.exports = class Tools {
 		return embed;
 	}
 	async doAction(message, action, user, reason, guildData) {
-		// if(action == 'kick') {
-		// 	if(user.kickable) {user.kick({ reason: reason });}
-		// }
+
+		 if(action == 'kick') {
+		 	if(user.kickable) {user.kick({ reason: reason });}
+		 }
 		if (action == 'ban') {
 			if (user.bannable) {
 				user.ban({ reason: reason });

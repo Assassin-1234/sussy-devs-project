@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 // const { MessageEmbed } = require('discord.js');
 const Event = require('../Structures/EventBase');
@@ -8,7 +9,7 @@ module.exports = class extends Event {
 
 		if (!message.guild || message.author.bot) return;
 
-		const guildData = await schema.findOne({ guildId: message.guild.id });
+		const guildData = await this.client.db.findOrCreateGuild(message.guild.id);
 
 		if (guildData.blacklist.state === true) return;
 
@@ -20,37 +21,69 @@ module.exports = class extends Event {
 			? message.content.match(mentionRegexPrefix)[0]
 			: customPrefix;
 
-		const msgArray = message.content.split(' ');
+		const msgArray = message.content.split('');
 
-		if(guildData.config.AntiLinks) {
-			if(guildData.whitelists.AntiLinks.channels.includes(message.channel.id) || guildData.whitelists.AntiLinks.roles.forEach(e => message.member.roles.cache.has(e))) return;
-			const regex = new RegExp('^(https?:\\/\\/)?' +
-			'((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
-			'((\\d{1,3}\\.){3}\\d{1,3}))' +
-			'(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
-			'(\\?[;&a-z\\d%_.~+=-]*)?' +
-			'(\\#[-a-z\\d_]*)?$', 'i');
-			msgArray.forEach(async msg => {
-				if(regex.test(msg)) {
+		if (guildData.config.AntiLinks) {
+			if (
+				guildData.whitelists.AntiLinks.channels.includes(message.channel.id) ||
+        guildData.whitelists.AntiLinks.roles.forEach((e) =>
+        	message.member.roles.cache.has(e),
+        )
+			) {
+				return;
+			}
+			const regex = new RegExp(
+				'^(https?:\\/\\/)?' +
+          '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+          '((\\d{1,3}\\.){3}\\d{1,3}))' +
+          '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+          '(\\?[;&a-z\\d%_.~+=-]*)?' +
+          '(\\#[-a-z\\d_]*)?$',
+				'i',
+			);
+			msgArray.forEach(async (msg) => {
+				if (regex.test(msg)) {
 					const action = guildData.actions.AntiLinks;
-					await this.client.utils.doAction(message, action, message.member, 'posting links', guildData);
+					await this.client.utils.doAction(
+						message,
+						action,
+						message.member,
+						'posting links',
+						guildData,
+					);
 				}
 			});
 		}
 
-		if(guildData.config.CapsThreshold) {
-			if(guildData.whitelists.CapsThreshold.channels.includes(message.channel.id) || guildData.whitelists.CapsThreshold.roles.forEach(e => message.member.roles.cache.has(e))) return;
+		if (guildData.config.CapsThreshold) {
+			if (
+				guildData.whitelists.CapsThreshold.channels.includes(
+					message.channel.id,
+				) ||
+        guildData.whitelists.CapsThreshold.roles.forEach((e) =>
+        	message.member.roles.cache.has(e),
+        )
+			) {
+				return;
+			}
 			const threshold = guildData.config.CapsThreshold;
-			const percentage = Math.round((threshold / 100) * msgArray.length);
+			const percentage = threshold;
 			const words = [];
-			msgArray.forEach(msg => {
-				if(msg == msg.toUpperCase()) {
+
+			msgArray.forEach((msg) => {
+				if (msg == msg.toUpperCase() && isNaN(msg) && msg.match(/[a-z]/i)) {
 					words.push(msg);
 				}
 			});
-			if(words.length >= percentage) {
+			if (words.length >= percentage) {
 				const action = guildData.actions.CapsThresHold;
-				await this.client.utils.doAction(message, action, message.member, 'excessive caps', guildData);
+				await this.client.utils.doAction(
+					message,
+					action,
+					message.member,
+					'excessive caps',
+					guildData,
+				);
 			}
 		}
 
@@ -164,7 +197,15 @@ module.exports = class extends Event {
 			].filter(
 				(c) => leven(cmd.toLowerCase(), c.toLowerCase()) < c.length * 0.4,
 			);
-			const dym = best.length == 0 ? '' : best.length == 1 ? `- ${cmd}\n+ ${best[0]}` : `${best.slice(0, 3).map((value) => `- ${cmd}\n+ ${value}`).join('\n')}`;
+			const dym =
+        best.length == 0
+        	? ''
+        	: best.length == 1
+        		? `- ${cmd}\n+ ${best[0]}`
+        		: `${best
+        			.slice(0, 3)
+        			.map((value) => `- ${cmd}\n+ ${value}`)
+        			.join('\n')}`;
 			return dym
 				? message.channel.send({
 					content: `Invalid command! Maybe you meant this command: \n \`\`\`diff\n${dym}\`\`\``,

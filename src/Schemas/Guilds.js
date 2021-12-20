@@ -33,7 +33,7 @@ const Guilds = new Schema({
 			AntiLinks: false,
 			AntiRaid: false,
 			AntiCaps: false,
-			CapsThreshold: 0,
+			CapsThreshold: 10,
 			AutoQuarantine: false,
 		},
 	},

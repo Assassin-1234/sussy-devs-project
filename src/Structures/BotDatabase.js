@@ -8,7 +8,6 @@ module.exports = class deFDatabase {
 		this.cache = new GooseCache(database, { engine: 'memory' });
 	}
 	async loadDatabase() {
-
 		database.connect(process.env.MONGO_URI, {
 			useNewUrlParser: true,
 			useUnifiedTopology: true,
@@ -30,26 +29,24 @@ module.exports = class deFDatabase {
 	}
 
 	/**
-    * @param {string} guildId - Id of the Guild
-    */
+   * @param {string} guildId - Id of the Guild
+   */
 	async findOrCreateGuild(guildId) {
 		if (!guildId) throw new TypeError('Please Provide a Guild ID');
-		const guild = await Guild.findOne({ guildId: guildId }).cache(60, `GUILD_${guildId}`);
+		const guild = await Guild.findOne({ guildId: guildId }).cache(
+			60,
+			`GUILD_${guildId}`,
+		);
 		if (!guild) {
 			const newGuild = new Guild({ guildId: guildId });
-			const { prefix, registeredAt, blacklist, config, whitelists, actions } = newGuild;
+			const { prefix, registeredAt, blacklist, config, whitelists, actions } =
+        newGuild;
 			await newGuild.save().catch((error) => console.log('Error!', error));
 
-			return { prefix, registeredAt, blacklist, config, whitelists, actions };
+			return newGuild;
 		}
 		else {
-			const prefix = guild.prefix;
-			const registeredAt = guild.registeredAt;
-			const blacklist = guild.blacklist;
-			const config = guild.config;
-			const whitelists = guild.whitelists;
-			const actions = guild.actions;
-			return { prefix, registeredAt, blacklist, config, whitelists };
+			return guild;
 		}
 	}
 };

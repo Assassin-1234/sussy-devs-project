@@ -1,6 +1,13 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 const Command = require('../../Structures/CommandBase');
-const { Permissions, Message, MessageEmbed, MessageSelectMenu, MessageActionRow } = require('discord.js');
+const {
+	Permissions,
+	Message,
+	MessageEmbed,
+	MessageSelectMenu,
+	MessageActionRow,
+} = require('discord.js');
 
 class Help extends Command {
 	constructor(...args) {
@@ -16,18 +23,23 @@ class Help extends Command {
 	}
 
 	/**
-     * @param {Message} message
-     * @param {Array} args
-     */
+   * @param {Message} message
+   * @param {Array} args
+   */
 
 	async run(message, args, prefix) {
 		if (args?.length) {
-
 			const command =
-                this.client.commands.get(args[0].toLowerCase()) ||
-                this.client.commands.get(this.client.aliases.get(args[0].toLowerCase()));
+        this.client.commands.get(args[0].toLowerCase()) ||
+        this.client.commands.get(
+        	this.client.aliases.get(args[0].toLowerCase()),
+        );
 
-			if (!command) return message.reply({ content: `Command \`${args[0].toLowerCase()}\` doesn't exist` });
+			if (!command) {
+				return message.reply({
+					content: `Command \`${args[0].toLowerCase()}\` doesn't exist`,
+				});
+			}
 
 			if (args.length > 1 && command.subCommands) {
 				const subcommand = args.slice(1).toString().toLowerCase();
@@ -36,37 +48,79 @@ class Help extends Command {
 					return cmd.name === subcommand || cmd.aliases?.includes(subcommand);
 				});
 
-				if (!foundSubcommand) return message.reply({ content: `Subcommand \`${subcommand}\` doesn't exist` });
+				if (!foundSubcommand) {
+					return message.reply({
+						content: `Subcommand \`${subcommand}\` doesn't exist`,
+					});
+				}
 
 				const helpEmbed = new MessageEmbed()
 					.setTitle('Subcommand Help ↷')
 					.addField('Name', `\`${foundSubcommand.name}\``, false)
 					.addField('Description', `\`${foundSubcommand.description}\``, false);
 
-				if (foundSubcommand.aliases) {helpEmbed.addField('Aliases', `\`${foundSubcommand.aliases.join(', ')}\``, false);}
-				if (foundSubcommand.cooldown) {helpEmbed.addField('Cooldown', `\`${foundSubcommand.cooldown / 1000} Seconds\``, false);}
-				if (foundSubcommand.usage) {helpEmbed.addField('Usage', `\`${foundSubcommand.usage.join(', ')}\``, false);}
+				if (foundSubcommand.aliases) {
+					helpEmbed.addField(
+						'Aliases',
+						`\`${foundSubcommand.aliases.join(', ')}\``,
+						false,
+					);
+				}
+				if (foundSubcommand.cooldown) {
+					helpEmbed.addField(
+						'Cooldown',
+						`\`${foundSubcommand.cooldown / 1000} Seconds\``,
+						false,
+					);
+				}
+				if (foundSubcommand.usage) {
+					helpEmbed.addField(
+						'Usage',
+						`\`${foundSubcommand.usage.join(', ')}\``,
+						false,
+					);
+				}
 
 				return message.reply({
 					embeds: [helpEmbed],
 				});
-
 			}
 			else {
 				const helpEmbed = new MessageEmbed()
 					.setTitle('Command Help ↷')
 					.addField('Name', `\`${command.name}\``, false)
 					.addField('Description', `\`${command.name}\``, false);
-				if (command.subCommands) {helpEmbed.addField('Subcommands', `\`${command.subCommands.map(cmd => cmd.name).join(', ')}\``, false);}
-				if (command.aliases) {helpEmbed.addField('Aliases', `\`${command.aliases.join(', ')}\``, false);}
-				if (command.cooldown) {helpEmbed.addField('Cooldown', `\`${command.cooldown / 1000} Seconds\``, false);}
-				if (command.usage.length) {helpEmbed.addField('Usage', `\`${command.usage.join(', ')}\``, false);}
+				if (command.subCommands) {
+					helpEmbed.addField(
+						'Subcommands',
+						`\`${command.subCommands.map((cmd) => cmd.name).join(', ')}\``,
+						false,
+					);
+				}
+				if (command.aliases) {
+					helpEmbed.addField(
+						'Aliases',
+						`\`${command.aliases.join(', ')}\``,
+						false,
+					);
+				}
+				if (command.cooldown) {
+					helpEmbed.addField(
+						'Cooldown',
+						`\`${command.cooldown / 1000} Seconds\``,
+						false,
+					);
+				}
+				if (command.usage.length) {
+					helpEmbed.addField('Usage', `\`${command.usage.join(', ')}\``, false);
+				}
 
 				return message.reply({ embeds: [helpEmbed] });
 			}
 		}
 		const categories = this.client.utils.removeDupes(
-			this.client.commands.map((cmd) => cmd.category));
+			this.client.commands.map((cmd) => cmd.category),
+		);
 
 		const select = new MessageSelectMenu()
 			.setCustomId('HELP_CATEGORIES')
@@ -75,25 +129,44 @@ class Help extends Command {
 			.setMaxValues(1);
 		for (const category of categories) {
 			select.addOptions([
-				{ label: this.client.utils.capitalise(category), description: `${this.client.utils.capitalise(category)} commands`, value: category },
+				{
+					label: this.client.utils.capitalise(category),
+					description: `${this.client.utils.capitalise(category)} commands`,
+					value: category,
+				},
 			]);
 		}
 
+		const categorySelects = new MessageActionRow().addComponents(select);
 
-		const categorySelects = new MessageActionRow()
-			.addComponents(
-				select,
-			);
-
-		return message.reply({ embeds: [
-			new MessageEmbed()
-				.setColor('WHITE')
-				.setTitle('Sus bot help')
-				.setDescription([
-					`The prefix for this server is \`${prefix}\``,
-					`Type \`${prefix}help <command>\` to get info about a specific command.`,
-					`Type \`${prefix}help <command> <subcommand>\` to get info about a specific subcommand.`].join('\n')),
-		], components: [categorySelects, { type: 1, components: [{ type: 2, style: 5, label: 'Support Server', url: 'https://discord.gg/v9QsJYveCs' }] }] });
+		return message.reply({
+			embeds: [
+				new MessageEmbed()
+					.setColor('WHITE')
+					.setTitle('Sus bot help')
+					.setDescription(
+						[
+							`The prefix for this server is \`${prefix}\``,
+							`Type \`${prefix}help <command>\` to get info about a specific command.`,
+							`Type \`${prefix}help <command> <subcommand>\` to get info about a specific subcommand.`,
+						].join('\n'),
+					),
+			],
+			components: [
+				categorySelects,
+				{
+					type: 1,
+					components: [
+						{
+							type: 2,
+							style: 5,
+							label: 'Support Server',
+							url: 'https://discord.gg/v9QsJYveCs',
+						},
+					],
+				},
+			],
+		});
 	}
 }
 
